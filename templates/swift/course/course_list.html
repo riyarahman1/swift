@@ -1,0 +1,23 @@
+{% load static %}
+{% for course in courses %}
+<tr>
+    <td>{{forloop.counter0|add:courses.start_index}}</td>
+    <td>{{course.name}}</td>
+    <td>{{course.curriculum}}</td>
+    <td>{{course.is_active}}</td>
+    <td>
+        <a href="javascript:;" class="course-edit" id="course-edit" data-fancybox="" data-src="#course-popup"
+            data-url="{% url 'appswift:update_course' course.id %}">
+            <img src="{% static '/swift/assets/images/edt_icon.svg' %}" alt="icon">
+        </a>
+
+        <a href="javascript:;" onclick="DeleteCourse({{course.id}})">
+            <img src="{% static '/swift/assets/images/dlt_icon.svg' %}" alt="icon">
+        </a>
+    </td>
+<tr>
+    {% empty %}
+<tr>
+    <td colspan="5">No results found.</td>
+</tr>
+{% endfor %}

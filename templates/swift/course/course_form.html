@@ -1,0 +1,22 @@
+<div class="formbg-inner">
+    <div class="edit-course-form">
+        {% if id %}
+        <input type="hidden" value="{% url 'appswift:update_course' id %}" id="form_url" name="form_url">
+        {% else %}
+        <input type="hidden" value="{% url 'appswift:create_course' %}" id="form_url" name="form_url">
+        {% endif %}
+        <div class="field padding-bottom--24">
+            <label for="name">Name</label>
+            {{ form.name }}
+            <p class="text-danger mt-2 mb-0">{{ form.name.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <label for="curriculum">Curriculum</label>
+            {{ form.curriculum }}
+            <p class="text-danger mt-2 mb-0">{{ form.curriculum.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <input class="course-submit" id="course-submit" type="submit" name="submit" value="Save">
+        </div>
+    </div>
+</div>

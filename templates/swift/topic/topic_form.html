@@ -1,0 +1,27 @@
+<div class="formbg-inner">
+    <div class="edit-topic-form">
+        {% if id %}
+        <input type="hidden" value="{% url 'appswift:update_topic' id %}" id="form_url" name="form_url">
+        {% else %}
+        <input type="hidden" value="{% url 'appswift:create_topic' %}" id="form_url" name="form_url">
+        {% endif %}
+        <div class="field padding-bottom--24">
+            <label for="name">Name</label>
+            {{ form.name }}
+            <p class="text-danger mt-2 mb-0">{{ form.name.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <label for="course">Course</label>
+            {{ form.course }}
+            <p class="text-danger mt-2 mb-0">{{ form.course.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <label for="subject">Subject</label>
+            {{ form.subject }}
+            <p class="text-danger mt-2 mb-0">{{ form.subject.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <input class="topic-submit" id="topic-submit" type="submit" name="submit" value="Save">
+        </div>
+    </div>
+</div>

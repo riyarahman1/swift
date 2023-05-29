@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/default.css' %}">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/reset.css' %}">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/main.css' %}">
+    <!-- <link rel="stylesheet" href="{% static '/swift/assets/css/responsive.css' %}"> -->
+    <link rel="stylesheet" href="{% static '/swift/assets/css/custom.css'%}">
+</head>
+<body>
+    {% block body_block %}
+    {% endblock %}
+    <script src="{% static '/swift/assets/js/jquery.min.js'%}"></script>
+    <script src="{% static '/swift/assets/js/bootstrap.min.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    {% block page_script %}
+    {% endblock %}
+</body>
+</html>

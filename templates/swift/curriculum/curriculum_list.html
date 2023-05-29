@@ -1,0 +1,17 @@
+{% load static %}
+{% for curriculum in curriculums %}
+<tr>
+    <td>{{forloop.counter0|add:curriculums.start_index}}</td>
+    <td>{{curriculum.name}}</td>
+    <td>{{curriculum.is_active}}</td>
+    <td>
+        <a href="javascript:;" class="curriculum-edit" id="curriculum-edit" data-fancybox="" data-src="#curriculum-popup" data-url="{% url 'appswift:update_curriculum' curriculum.id %}">
+            <img src="{% static '/swift/assets/images/edt_icon.svg' %}" alt="icon">
+        </a>
+
+        <a href="javascript:;" onclick="DeleteCurriculum({{curriculum.id}})">
+            <img src="{% static '/swift/assets/images/dlt_icon.svg' %}" alt="icon">
+        </a>
+    </td>
+<tr>
+{% endfor %}

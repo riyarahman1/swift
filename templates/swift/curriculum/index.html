@@ -1,0 +1,56 @@
+{% extends "swift/layout/user_base.html" %} {% load static %} {% block body_block %}
+<div class="content-inner full-screen">
+    <div class="page-block">
+        <input type="hidden" value="{% url 'appswift:curriculum' %}" id="load_curriculum">
+        <div class="d-flex justify-content-between">
+            <h1 class="page-block-title">Curriculum</h1>
+            <div>
+                <a class="add-curriculum" id="create_curriculum" data-fancybox="" data-src="#curriculum-popup"  data-url="{% url 'appswift:create_curriculum'%}">
+                    <button>+</button>
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl.NO</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="curriculum-tbody">
+                    {% include 'swift/curriculum/curriculum_list.html' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagination-outer align-items-center justify-content-between d-flex" id="curriculum-pagination">
+        {% include 'swift/curriculum/pagination.html' %}
+    </div>
+
+    <div>
+        <!-- Curriculum Add form starts-->
+        <div class="add-curriculum" id="curriculum-popup" style="display:none;">
+            <div class="pop-body" id="curriculum-div">
+                <div class="formbg-inner">
+                    <form method="post" action="" class="CurriculumForm" id="CurriculumForm" name="CurriculumForm">
+                        {% csrf_token %}
+                        <h2 class="padding-bottom--15" id="popup_head">Add Curriculum</h2>
+                        <div class="curriculum-form" id="curriculum-form-div">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Curriculum Add form ends -->
+    </div>
+</div>
+</div>
+{% endblock body_block %} 
+{% block page_script %}
+<script src="{% static '/swift/assets/js/curriculum.js' %}?v={% now 'd_m_yH:i:s'%}"></script>
+{% endblock page_script %}

@@ -1,0 +1,70 @@
+{% load static %}
+<div class="sidebar-content">
+    <div class="sidebar-content-wrapper">
+        <div class="logo-box">
+            <h1 class="logo-full">LOGO</h1>
+            <h1 class="logo-collapsed">L</h1>
+        </div>
+        <nav>
+            <ul class="sidebar-link-list">
+                <li class="sidebar-item active">
+                    <a href="{% url 'appswift:home' %}" class="sidebar-link">
+                        <span class="menu-icon">
+                            <img class="icon-dark" src="{% static 'swift/assets/images/dashboard.svg' %}">
+                            <img class="icon-white" src="{% static 'swift/assets/images/dashboard-white.svg' %}">
+                        </span>
+                        <span class="menu-item">Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <span class="menu-icon">
+                            <img class="icon-dark" src="{% static 'swift/assets/images/dashboard.svg' %}">
+                            <img class="icon-white" src="{% static 'swift/assets/images/dashboard-white.svg' %}">
+                        </span>
+                        <span class="menu-item">User</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link sub-link">
+                        <span class="menu-icon">
+                            <img class="icon-dark" src="{% static 'swift/assets/images/dashboard.svg' %}">
+                            <img class="icon-white" src="{% static 'swift/assets/images/dashboard-white.svg' %}">
+                        </span>
+                        <span class="menu-item">Settings</span>
+                        <div class="drop-arrow">
+                            <span class="icon-Vector-2"></span>
+                        </div>
+                    </a>
+                    <ul class="sub-menu">
+                        <li class="submenu-list">
+                            <a href="{% url 'appswift:curriculum' %}" class="submenu-item">Curriculum</a>
+                        </li>
+                        <li class="submenu-list">
+                            <a href="{% url 'appswift:course' %}" class="submenu-item">Course</a>
+                        </li>
+                        <li class="submenu-list">
+                            <a href="{% url 'appswift:subject' %}" class="submenu-item">Subject</a>
+                        </li>
+                        <li class="submenu-list">
+                            <a href="{% url 'appswift:topic' %}" class="submenu-item">Topic</a>
+                        </li>
+                        <li class="submenu-list">
+                            <a href="{% url 'appswift:subtopic' %}" class="submenu-item">Subtopic</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'appswift:signout' %}" class="sidebar-link">
+                        <span class="menu-icon">
+                            <img class="icon-dark" src="{% static 'swift/assets/images/dashboard.svg' %}">
+                            <img class="icon-white" src="{% static 'swift/assets/images/dashboard-white.svg' %}">
+                        </span>
+                        <span class="menu-item">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        </div>
+    </div>

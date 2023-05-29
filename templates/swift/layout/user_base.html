@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/bootstrap.min.css'%} ">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/default.css'%}">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/reset.css'%}">
+    <link rel="stylesheet" href="{% static '/swift/assets/css/main.css'%}">
+    <!-- <link rel="stylesheet" href="{% static '/swift/assets/css/responsive.css'%}"> -->
+    <link rel="stylesheet" href="{% static '/swift/assets/css/custom.css'%}">
+    <link href="{% static '/swift/assets/css/jquery.fancybox.min.css' %}" rel="stylesheet">
+    <link href="{% static '/swift/assets/css/magnific-popup.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+    <div class="side-bar">
+        {% include 'swift/layout/menu.html' %}
+        {% include 'swift/status_message.html' %}
+    </div>
+    <div class="main-panel">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="toggle-btn">
+                    <span class="icon-menu_icon"></span>
+                </div>
+                <div class="mobile-btn">
+                    <span class="icon-menu_icon"></span>
+                </div>
+            </div>
+            <ul class="top-bar-right">
+                <li class="profile-avatar">
+                    <img src="{% static 'swift/assets/images/default-avatar.jpg' %}" alt="image">
+                </li>
+            </ul>
+            
+        </div>
+        <div class="content">
+            {% block body_block %}
+            {% endblock %}
+        </div>
+    </div>
+    </div>
+
+    </div>
+    <script src="{% static '/swift/assets/js/jquery.min.js'%}"></script>
+    <script src="{% static '/swift/assets/js/bootstrap.min.js'%}"></script>
+    <script src="{% static '/swift/assets/js/main.js'%}"></script>
+    <script src="{% static '/swift/assets/js/jquery.fancybox.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% block page_script %}
+    {% endblock %}
+</body>
+</html>

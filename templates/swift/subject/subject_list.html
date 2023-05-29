@@ -1,0 +1,24 @@
+{% load static %}
+{% for subject in subjects %}
+<tr>
+    <td>{{forloop.counter0|add:subjects.start_index}}</td>
+
+    <td>{{subject.name}}</td>
+    <td>{{subject.course}}</td>
+    <td>{{subject.is_active}}</td>
+    <td>
+        <a href="javascript:;" class="subject-edit" id="subject-edit" data-fancybox="" data-src="#subject-popup"
+            data-url="{% url 'appswift:update_subject' subject.id %}">
+            <img src="{% static '/swift/assets/images/edt_icon.svg' %}" alt="icon">
+        </a>
+
+        <a href="javascript:;" onclick="DeleteSubject({{subject.id}})">
+            <img src="{% static '/swift/assets/images/dlt_icon.svg' %}" alt="icon">
+        </a>
+    </td>
+<tr>
+    {% empty %}
+<tr>
+    <td colspan="5">No results found.</td>
+</tr>
+{% endfor %}

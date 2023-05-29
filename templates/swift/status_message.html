@@ -1,0 +1,18 @@
+{% load static %}
+<div class="flash_message error" style="display:none;" id="flash_message_error">
+	<span class="icon">
+	<img src="{% static '/swift/assets/images/cross.png' %}"/>
+    </span>
+	<span class="msg msg_desc"></span>
+</div>
+
+<div class="flash_message success" style="display: none" id="flash_message_success">
+			<span class="icon">
+			<img src="{% static '/swift/assets/images/success.png' %}"/></span>
+			<span class="msg msg_desc"></span>
+</div>
+<div class="flash_message warning" style="display: none" id="flash_message_warning">
+			<span class="icon">
+			<img src="{% static '/swift/assets/images/warning.png' %}"/></span>
+			<span class="msg msg_desc"></span>
+</div>

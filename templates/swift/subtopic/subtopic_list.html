@@ -1,0 +1,23 @@
+{% load static %}
+{% for subtopic in subtopics %}
+<tr>
+    <td>{{forloop.counter0|add:subtopics.start_index}}</td>
+    <td>{{topic.name}}</td>
+    <td>{{topic.subject.course}}</td>
+    <td>{{topic.subject}}</td>
+    <td>{{topic.is_active}}</td>
+    <td>
+        <a href="javascript:;" class="topic-edit" id="topic-edit" data-fancybox="" data-src="#topic-popup" data-url="{% url 'appswift:update_topic' topic.id %}">
+            <img src="{% static '/swift/assets/images/edt_icon.svg' %}" alt="icon">
+        </a>
+
+        <a href="javascript:;" onclick="DeleteTopic({{topic.id}})">
+            <img src="{% static '/swift/assets/images/dlt_icon.svg' %}" alt="icon">
+        </a>
+    </td>
+<tr>
+    {% empty %}
+<tr>
+    <td colspan="5">No results found.</td>
+</tr>
+{% endfor %}

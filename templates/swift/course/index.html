@@ -1,0 +1,78 @@
+{% extends "swift/layout/user_base.html" %} {% load static %} {% block body_block %}
+
+<div class="content-inner full-screen">
+    <div class="page-block">
+        <input type="hidden" value="{% url 'appswift:course' %}" id="load_course">
+        <div class="d-flex justify-content-between">
+
+            <h1 class="page-block-title" style="margin-top: 21px;">Course</h1>
+            <div class="row">
+                <div class="col-md-4">
+                    <select id="curriculum-select" name="curriculum" class="form-control">
+                        <option value="" selected>  ----- All -----</option>
+                        {% for curriculum in curriculums %}
+                        <option value="{{ curriculum.id }}">{{ curriculum.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" type="input" name="search" id="search-input" placeholder="Search"
+                        aria-label="Search">
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="button" name="reset"
+                        id="reset-button">Reset</button>
+                </div>
+            </div>
+            <div style="margin-right: 31px;margin-top: 19px;">
+                <a class="add-course" id="create_course" data-fancybox="" data-src="#course-popup"
+                    data-url="{% url 'appswift:create_course'%}">
+                    <button>ADD</button>
+                </a>
+            </div>
+        </div>
+        <div>
+            <table id="search-results">
+                <thead>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Name</th>
+                        <th>Curriculum</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="course-tbody">
+                    {% include 'swift/course/course_list.html' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagination-outer align-items-center justify-content-between d-flex" id="course-pagination">
+        {% include 'swift/course/pagination.html' %}
+    </div>
+    <div>
+        <!-- Course Add form starts-->
+        <div class="add-course" id="course-popup" style="display:none;">
+            <div class="pop-body" id="course-div">
+                <div class="formbg-inner">
+                    <form method="post" action="" class="CourseForm" id="CourseForm" name="CourseForm">
+                        {% csrf_token %}
+                        <h2 class="padding-bottom--15" id="popup_head">Add Course</h2>
+                        <div class="course-form" id="course-form-div">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Course Add form ends -->
+    </div>
+</div>
+</div>
+{% endblock body_block %}
+{% block page_script %}
+<script src="{% static '/swift/assets/js/course.js' %}?v={% now 'd_m_yH:i:s'%}"></script>
+
+
+{% endblock page_script %}

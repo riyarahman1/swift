@@ -1,0 +1,393 @@
+/* Login page */
+
+@import "../css/font-icon.css";
+.login-bg {
+    background: rgb(112, 204, 245);
+    background: radial-gradient(circle, rgba(112, 204, 245, 1) 0%, rgba(177, 248, 230, 1) 100%);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.login-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.login-box {
+    min-width: 450px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+
+.login-input {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.login-input input {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 15px 0;
+}
+
+.login-btn-wrapper {
+    margin: 15px 0;
+}
+
+.login-btn-wrapper .main-button {
+    width: 100%;
+    min-height: 45pxf;
+}
+
+.main-container {
+    min-height: 100vh;
+    width: 100%;
+}
+
+
+/* ----------------------------sidebar--------------------- */
+
+.side-bar {
+    position: fixed;
+    min-width: 230px;
+    max-width: 230px;
+    background-color: #ffffff;
+    -webkit-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -moz-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -o-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    overflow: auto;
+    z-index: 1000;
+}
+
+.logo-box {
+    padding: 0px 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 67px;
+}
+
+.logo-collapsed {
+    display: none;
+}
+
+.logo-box h1 {
+    font-size: 24px;
+    color: #9f9999;
+    ;
+}
+
+.side-bar.collapsed .logo-collapsed {
+    display: inline-block;
+    margin-right: 17px;
+}
+
+.side-bar.collapsed .logo-full {
+    display: none;
+}
+
+.side-bar.collapsed .logo-box {
+    flex-direction: row-reverse;
+}
+
+.sidebar-content {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    -webkit-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -moz-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -o-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+}
+
+.sidebar-link {
+    padding: 13px 10px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-link.active {
+    background-color: #4286f5;
+}
+
+.menu-icon img {
+    display: block;
+    width: 18px;
+    margin-right: 8px;
+}
+
+.menu-item {
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 14px;
+    color: #495057;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.sidebar-link .menu-icon .icon-white {
+    display: none;
+}
+
+.sidebar-item {
+    margin: 3px 0;
+}
+
+.sidebar-item.active .sidebar-link .menu-item {
+    color: #ffffff;
+}
+
+.sidebar-item.active .sidebar-link .menu-icon .icon-white {
+    display: block;
+}
+
+.sidebar-item.active .sidebar-link .menu-icon .icon-dark {
+    display: none;
+}
+
+.sidebar-item.active .sidebar-link {
+    background-color: #4286f5;
+}
+
+.sidebar-item.active .drop-arrow span {
+    color: #ffffff;
+}
+
+.sidebar-link:hover {
+    background-color: #4286f5;
+    transition: 0.3s cubic-bezier(0.57, 0.26, 1, 1) !important;
+}
+
+.sidebar-link:hover .menu-item {
+    color: #ffffff;
+}
+
+.sidebar-link:hover .menu-icon .icon-dark {
+    display: none;
+}
+
+.sidebar-link:hover .menu-icon .icon-white {
+    display: block;
+}
+
+.drop-arrow {
+    transition: 0.3s all ease-in;
+}
+
+.drop-arrow span {
+    font-size: 6px;
+    color: #000000;
+}
+
+.sidebar-link:hover .drop-arrow span {
+    color: #ffffff;
+}
+
+
+/* sub menu */
+
+.sub-menu {
+    display: none;
+    background-color: #7dafff;
+    ;
+    width: 100%;
+}
+
+.sidebar-link.open-menu {
+    background-color: #4286f5;
+}
+
+.sidebar-link.open-menu .menu-item {
+    color: #ffffff;
+}
+
+.sidebar-item .sidebar-link.open-menu .menu-icon .icon-white {
+    display: block;
+}
+
+.sidebar-item .sidebar-link.open-menu .menu-icon .icon-dark {
+    display: none;
+}
+
+.sidebar-item .sidebar-link.open-menu .drop-arrow span {
+    color: #ffffff;
+}
+
+.submenu-item {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 24px 10px 37px;
+    display: block;
+    width: 100%;
+    clear: both;
+    font-weight: 400;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.submenu-list:hover .submenu-item {
+    background-color: #629cfb;
+    color: #ffffff;
+}
+
+.sidebar-link.open-menu .drop-arrow {
+    transform: rotate(180deg);
+}
+
+.side-bar.collapsed .sub-menu {
+    display: none !important;
+}
+
+.side-bar.collapsed:hover .sidebar-link.open-menu+.sub-menu {
+    display: block !important;
+}
+
+
+/*----------------------- side bar collapsed--------------------------- */
+
+.side-bar.collapsed {
+    margin-left: -165px;
+}
+
+.side-bar.collapsed .sidebar-link {
+    flex-direction: row-reverse;
+}
+
+.side-bar.collapsed .menu-icon {
+    margin-right: 7px;
+}
+
+
+/*----------------------- side bar hover--------------------------- */
+
+.side-bar.collapsed:hover {
+    margin-left: 0;
+    box-shadow: 3px 5px 10px 2px #e6e6e6;
+}
+
+.side-bar.collapsed:hover .sidebar-link {
+    flex-direction: row;
+}
+
+.side-bar.collapsed:hover .menu-icon {
+    margin-right: unset;
+}
+
+.side-bar.collapsed:hover .logo-box {
+    flex-direction: row;
+}
+
+.side-bar.collapsed:hover .logo-full {
+    display: block;
+}
+
+.side-bar.collapsed:hover .logo-collapsed {
+    display: none;
+}
+
+
+/*----------------------- main body -----------------*/
+
+.main-panel {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+    background: #f4f5fa;
+    ;
+    flex-direction: column;
+    overflow: hidden;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    -webkit-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -moz-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    -o-transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+}
+
+
+/* top bar------------------ */
+
+.top-bar {
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    width: calc(100% - 230px);
+    min-height: 55px;
+    margin-left: 230px;
+    background-color: #ffffff;
+    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.mobile-btn {
+    display: none;
+}
+
+.toggle-btn span,
+.mobile-btn span {
+    cursor: pointer;
+    color: #babdc0;
+    font-size: 14px;
+}
+
+.profile-avatar {
+    width: 30px;
+    height: 30px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.main-panel.body-expand .top-bar {
+    margin-left: 65px;
+    width: calc(100% - 65px);
+}
+
+
+/*----------- screen body----------------- */
+
+.content-inner {
+    margin: 80px 20px 20px 250px;
+    transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out, margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
+}
+
+.main-panel.body-expand .content-inner {
+    margin: 80px 20px 20px 85px;
+}
+
+.full-screen {
+    min-height: calc(100vh - 100px);
+}
+
+.page-block {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+}
