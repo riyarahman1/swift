@@ -243,11 +243,9 @@ $(document).on('click', '#create_subtopic', function (event) {
             $('#subtopic-form-div').html(response.template);
             $('#popup_head').html(response.title);
 
-        
             $(document).on('change', '#id_topic', function () {
                 var topicId = $(this).val();
 
-               
                 $.ajax({
                     url: '/subtopic/filter/',
                     type: 'GET',
@@ -265,12 +263,8 @@ $(document).on('click', '#create_subtopic', function (event) {
                             }));
                         });
 
-                        var courseSelect = $('#id_course');
-                        courseSelect.empty();
-                        courseSelect.append($('<option>', {
-                            value: '',
-                            text: '---------'
-                        }));
+                        // Trigger the change event for the subject dropdown to fetch and populate the course dropdown
+                        subjectSelect.trigger('change');
                     }
                 });
             });
@@ -278,7 +272,6 @@ $(document).on('click', '#create_subtopic', function (event) {
             $(document).on('change', '#id_subject', function () {
                 var subjectId = $(this).val();
 
-                
                 $.ajax({
                     url: '/subtopic/filter/',
                     type: 'GET',
@@ -302,6 +295,7 @@ $(document).on('click', '#create_subtopic', function (event) {
         },
     });
 });
+
 
 
 

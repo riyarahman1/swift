@@ -110,8 +110,6 @@ class TopicCreate(LoginRequiredMixin, View):
                     log_data["status"] = SUCCESS
                     log_data["model_object"] = obj
                     log_data["db_data"] = {"name": name}
-                    # log_data['db_data'] = {'course':course}
-
                     log_data["app_visibility"] = True
                     log_data["web_visibility"] = True
                     log_data["error_msg"] = ""

@@ -181,28 +181,23 @@ class SubTopicForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.is_bound and self.data.get("topic"):
-            topic_id = self.data.get("topic")
-            self.fields["subject"].queryset = Subject.objects.filter(topic=topic_id)
+        if self.is_bound and self.data.get("topic_id"):
+            topic_id = self.data.get("topic_id")
+            self.fields["subject"].queryset = Subject.objects.filter(topic_id=topic_id)
         elif self.instance.pk and self.instance.topic:
             topic_id = self.instance.topic_id
-            self.fields["subject"].queryset = Subject.objects.filter(topic=topic_id)
+            self.fields["subject"].queryset = Subject.objects.filter(topic_id=topic_id)
         else:
             self.fields["subject"].queryset = Subject.objects.none()
 
-        if self.is_bound and self.data.get("subject"):
-            subject_id = self.data.get("subject")
-            self.fields["course"].queryset = Course.objects.filter(subject=subject_id)
+        if self.is_bound and self.data.get("subject_id"):
+            subject_id = self.data.get("subject_id")
+            self.fields["course"].queryset = Course.objects.filter(subject_id=subject_id)
         elif self.instance.pk and self.instance.subject:
             subject_id = self.instance.subject_id
-            self.fields["course"].queryset = Course.objects.filter(subject=subject_id)
+            self.fields["course"].queryset = Course.objects.filter(subject_id=subject_id)
         else:
             self.fields["course"].queryset = Course.objects.none()
-
-        # Clear subject and course fields if topic is not selected
-        if not self.is_bound or not self.data.get("topic"):
-            self.fields["subject"].initial = None
-            self.fields["course"].initial = None
 
     class Meta:
         model = SubTopic

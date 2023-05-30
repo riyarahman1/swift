@@ -92,56 +92,70 @@ class SubtopicCreate(LoginRequiredMixin, View):
         }
         return JsonResponse(data)
 
+    
     def post(self, request, *args, **kwargs):
-        form = SubTopicForm(request.POST)
         response = {}
-
+        form = SubTopicForm(request.POST or None)
         if form.is_valid():
-            name = form.cleaned_data["name"]
-            topic_id = form.cleaned_data["topic"]
-            lessons = form.cleaned_data["lessons"]
-            objectives = form.cleaned_data["objectives"]
+            try:
+                # with transaction.atomic():
+                name = request.POST.get("name", None)
+                topic = request.POST.get("topic", None)
+                lessons = request.POST.get("lessons", None)
+                objectives = request.POST.get("objectives", None)
+                
+                # CHECK THE DATA EXISTS
+                if not SubTopic.objects.filter(name=name).exists():
+                    obj = SubTopic.objects.create(
+                         name=name, topic_id=topic,lessons_id=lessons,objectives_id=objectives
+                     )
 
-            # CHECK IF THE SUBTOPIC ALREADY EXISTS
-            if not SubTopic.objects.filter(name=name).exists():
-                topic = Topic.objects.get(id=topic_id)
-                obj = SubTopic.objects.create(
-                    name=name,
-                    topic=topic,
-                    lessons=lessons,
-                    objectives=objectives,
-                )
+                    # log entry
+                    log_data = {}
+                    log_data["module_name"] = "SubTopic"
+                    log_data["action_type"] = CREATE
+                    log_data["log_message"] = "SubTopic Created"
+                    log_data["status"] = SUCCESS
+                    log_data["model_object"] = obj
+                    log_data["db_data"] = {"name": name}
+                    log_data["app_visibility"] = True
+                    log_data["web_visibility"] = True
+                    log_data["error_msg"] = ""
+                    log_data["fwd_link"] = "/subtopic/"
+                    LogUserActivity(request, log_data)
 
-                # log entry
-                log_data = {
-                    "module_name": "Subtopic",
-                    "action_type": "CREATE",
-                    "log_message": "Subtopic Created",
-                    "status": "SUCCESS",
-                    "model_object": obj,
-                    "db_data": {"name": name},
-                    "app_visibility": True,
-                    "web_visibility": True,
-                    "error_msg": "",
-                    "fwd_link": "/subtopic/",
-                }
+                    response["status"] = True
+                    response["message"] = "Added successfully"
+                else:
+                    response["status"] = False
+                    response["message"] = "Topic Already exists"
+
+            except Exception as error:
+                log_data = {}
+                log_data["module_name"] = "SubTopic"
+                log_data["action_type"] = CREATE
+                log_data["log_message"] = "SubTopic updation failed"
+                log_data["status"] = FAILED
+                log_data["model_object"] = None
+                log_data["db_data"] = {}
+                log_data["app_visibility"] = False
+                log_data["web_visibility"] = False
+                log_data["error_msg"] = error
+                log_data["fwd_link"] = "/subtopic/"
                 LogUserActivity(request, log_data)
 
-                response["status"] = True
-                response["message"] = "Added successfully"
-            else:
                 response["status"] = False
-                response["message"] = "Subtopic already exists"
+                response["message"] = "Something went wrong"
         else:
             response["status"] = False
             context = {"form": form}
-            response["title"] = "Add Subtopic"
+            response["title"] = "Add SubTopic"
             response["valid_form"] = False
             response["template"] = render_to_string(
                 "swift/subtopic/subtopic_form.html", context, request=request
             )
-
         return JsonResponse(response)
+
 
 
 class SubtopicUpdate(LoginRequiredMixin, View):
@@ -150,7 +164,7 @@ class SubtopicUpdate(LoginRequiredMixin, View):
         data = {}
         obj = get_object_or_404(SubTopic, id=id)
         form = SubTopicForm(instance=obj)
-        context = {"form": form, "id": id, "course_id": obj.topic.subject.course.course_id}
+        context = {"form": form, "id": id}
         data["status"] = True
         data["title"] = "Edit SubTopic"
         data["template"] = render_to_string(
@@ -179,9 +193,7 @@ class SubtopicUpdate(LoginRequiredMixin, View):
                         data["message"] = "Name already exists"
                         return JsonResponse(data)
 
-                    obj.name = request.POST.get("name", None)
-                    obj.description = request.POST.get("description", None)
-                    obj.save()
+                    obj = form.save()
 
                     # log entry
                     log_data = {
@@ -223,14 +235,13 @@ class SubtopicUpdate(LoginRequiredMixin, View):
                 data["status"] = True
         else:
             data["status"] = False
-            context = {"form": form, "id": id, "course_id": obj.topic.subject.course.course_id}
+            context = {"form": form, "id": id}
             data["title"] = "Edit SubTopic"
             data["valid_form"] = False
             data["template"] = render_to_string(
                 "swift/subtopic/subtopic_form.html", context, request=request
             )
             return JsonResponse(data)
-
 
 
 
@@ -265,17 +276,17 @@ class FilteredSubtopicView(View):
     def get(self, request):
         course_id = request.GET.get("course_id")
         subject_id = request.GET.get("subject_id")
-        
+
         if course_id and subject_id:
-            topics = SubTopic.objects.filter(
+            subtopics = SubTopic.objects.filter(
                 topic__subject__course_id=course_id,
                 topic__subject_id=subject_id
             )
         else:
-            topics = SubTopic.objects.none()
-        
+            subtopics = SubTopic.objects.none()
+
         subtopic_list = [
-            {"id": subtopic.id, "name": subtopic.name} for subtopic in topics
+            {"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics
         ]
         return JsonResponse({"subtopics": subtopic_list})
 
