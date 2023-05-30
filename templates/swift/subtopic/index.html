@@ -14,7 +14,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select id="topic-select" name="subject" class="form-control">
+                    <select id="topic-select" name="topic" class="form-control">
                         <option value="" selected>- All Topics -</option>
                         {% for topic in topics %}
                         <option value="{{ topic.id }}">{{ topic.name }}</option>
@@ -27,7 +27,7 @@
                 <div class="col-md-3">
                     <button class="btn btn-outline-secondary" type="button" name="reset" id="reset-button">Reset</button>
                 </div>
-            </div>
+            </div>            
             
 
             <div style="margin-right: 31px;margin-top: 19px;">

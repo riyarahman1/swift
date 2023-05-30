@@ -64,7 +64,7 @@ function FilterSubtopics(page) {
     if (subjects === '') {
         subjects = null;
     }
-    
+
     $.ajax({
         url: url,
         headers: { "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val() },
@@ -82,10 +82,11 @@ function FilterSubtopics(page) {
             $('#subtopic-pagination').html(response.pagination);
         },
         complete: function () {
-            updateTopicDropdown(subjects);
+            // No need to call updateTopicDropdown here, it is already being called when subject is changed
         }
     });
 }
+
 
 function updateTopicDropdown(subjectId) {
     $.ajax({
@@ -107,7 +108,7 @@ function updateTopicDropdown(subjectId) {
                     text: topic.name
                 }));
             });
-            
+
             // Trigger change event to update the selected topic
             topicSelect.trigger('change');
         }
@@ -119,6 +120,7 @@ $(document).ready(function () {
         e.preventDefault();
         FilterSubtopics('');
     });
+
     $('#search-input').on('keyup', function () {
         var query = $(this).val();
         FilterSubtopics(query);
@@ -126,8 +128,8 @@ $(document).ready(function () {
 
     $('#subject-select').change(function () {
         var subjects = $(this).val(); // Get selected subject values
-        FilterSubtopics('');
         updateTopicDropdown(subjects);
+        FilterSubtopics('');
     });
 
     $('#topic-select').change(function () {
