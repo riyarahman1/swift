@@ -7,14 +7,14 @@
             <div class="row">
                 <div class="col-md-4">
                     <select id="course-select" name="course" class="form-control">
-                        <option value="" selected> ----- All -----</option>
+                        <option value="" selected>  ----- All -----</option>
                         {% for course in courses %}
                         <option value="{{ course.id }}">{{ course.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <input class="form-control" type="input" name="search" id="search-input" placeholder="Search"
+                    <input class="form-control" type="input" name="searchs" id="search-input" placeholder="Search"
                         aria-label="Search">
                 </div>
                 <div class="col-md-4">
@@ -22,8 +22,6 @@
                         id="reset-button">Reset</button>
                 </div>
             </div>
-
-
             <div style="margin-right: 31px;margin-top: 19px;">
                 <a class="add-subject" id="create_subject" data-fancybox="" data-src="#subject-popup"
                     data-url="{% url 'appswift:create_subject'%}">

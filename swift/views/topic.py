@@ -28,6 +28,8 @@ class TopicView(LoginRequiredMixin, View):
 
         subject_list = Subject.objects.all()  
         course_list =  Course.objects.all()  
+        if courses:
+            subject_list = subject_list.filter(course_id=courses)
         
         context = {}
         context["subjects"] = subject_list
@@ -260,12 +262,17 @@ class TopicDelete(LoginRequiredMixin, View):
 
 
 
-
-
-
 class FilteredSubjectsView(View):
     def get(self, request):
         course_id = request.GET.get('course_id')
         subjects = Subject.objects.filter(course_id=course_id)
         subject_list = [{'id': subject.id, 'name': subject.name} for subject in subjects]
         return JsonResponse({'subjects': subject_list})
+    
+
+
+class GetSubjectsView(View):
+    def get(self, request, *args, **kwargs):
+        course_id = request.GET.get("course_id")
+        subjects = Subject.objects.filter(course_id=course_id).values("id", "name")
+        return JsonResponse({"subjects": list(subjects)})    

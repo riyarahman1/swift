@@ -1,12 +1,11 @@
 $(document).ready(function () {
-
     $("#SubjectsForm").validate({
         rules: {},
         messages: {},
         submitHandler: function (form, event) {
             event.preventDefault();
-            var formData = $("#SubjectsForm").serializeArray();   // Serialize the form data into an array
-            var url = $("#form_url").val()   // To get the URL of the form, use "form_url"
+            var formData = $("#SubjectsForm").serializeArray();
+            var url = $("#form_url").val()
             $.ajax({
                 url: url,
                 headers: {
@@ -15,8 +14,8 @@ $(document).ready(function () {
                 method: "POST",
                 data: formData,
                 beforeSend: function () {
-                    $("#subject-submit").attr("disabled", "disabled");  // Disable submit button
-                    $("#subject-submit").val("Saving...");  // Change text submit button
+                    $("#subject-submit").attr("disabled", "disabled");
+                    $("#subject-submit").val("Saving...");
                 },
                 success: function (response) {
                     if (response.status) {
@@ -36,7 +35,7 @@ $(document).ready(function () {
                                 $("#flash_message_error").attr("style", "display:none;")
                             }, 3500)
                         } else {
-                            $('#subject-form-div').html(response.template)  // Replaced with an AJAX template.
+                            $('#subject-form-div').html(response.template)
                         }
                     }
                 },
@@ -49,14 +48,16 @@ $(document).ready(function () {
     });
 });
 
+
 // Filter,search and reset
+
 function FilterSubjects(page) {
     if (page == '') {
         page = parseInt($('#current_page').val()) || 1;
     }
     var url = $('#load_subject').val();
-    var query = $('#search-input').val();
-    var reset = $('#reset-input').val();
+    var querys = $('#search-input').val();
+    var resets = $('#reset-input').val();
     var courses = $('#course-select').val(); // Get selected course values
     $.ajax({
         url: url,
@@ -64,9 +65,10 @@ function FilterSubjects(page) {
         method: "GET",
         data: {
             'page': page,
-            'search': query,
-            'reset': reset,
+            'searchs': querys,
+            'resets': resets,
             'course': courses // Pass the selected course values
+
         },
         beforeSend: function () { },
         success: function (response) {
@@ -83,15 +85,15 @@ $(document).ready(function () {
     });
 
     $('#search-input').on('keyup', function () {
-        var query = $(this).val();
-        FilterSubjects(query);
+        var querys = $(this).val();
+        FilterSubjects(querys);
     });
 
     $('#course-select').change(function () {
         var courses = $(this).val(); // Get selected course values
         FilterSubjects(courses);
     });
-
+    
     $('#reset-button').click(function () {
         $('#search-input').val('');
         $('#course-select').val('');
@@ -99,7 +101,6 @@ $(document).ready(function () {
         FilterSubjects('');
     });
 });
-
 
 
 
@@ -169,5 +170,3 @@ function DeleteSubject(id) {
         }
     });
 }
-
-

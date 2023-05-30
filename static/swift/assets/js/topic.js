@@ -58,8 +58,8 @@ function FilterTopics(page) {
     var url = $('#load_topic').val();
     var query = $('#search-input').val();
     var reset = $('#reset-input').val();
-    var subjects = $('#subject-select').val(); // Get selected subjects values
-    var courses = $('#course-select').val(); 
+    var subjects = $('#subject-select').val();
+    var courses = $('#course-select').val();
 
     $.ajax({
         url: url,
@@ -71,7 +71,6 @@ function FilterTopics(page) {
             'reset': reset,
             'subject': subjects,
             'course': courses,
-
         },
         beforeSend: function () { },
         success: function (response) {
@@ -81,23 +80,48 @@ function FilterTopics(page) {
     });
 }
 
+function updateSubjectDropdown(courseId) {
+    $.ajax({
+        url: '/topic/searchfilter/',
+        type: 'GET',
+        data: {
+            'course_id': courseId
+        },
+        success: function (response) {
+            var subjectSelect = $('#subject-select');
+            subjectSelect.empty();
+            subjectSelect.append($('<option>', {
+                value: '',
+                text: '- All Subjects -'
+            }));
+            $.each(response.subjects, function (index, subject) {
+                subjectSelect.append($('<option>', {
+                    value: subject.id,
+                    text: subject.name
+                }));
+            });
+        }
+    });
+}
+
 $(document).ready(function () {
     $('#search-form').submit(function (e) {
         e.preventDefault();
         FilterTopics('');
     });
-    $('#search-input').on('keyup', function () {
-        var query = $(this).val();
-        FilterTopics(query);
+    
+    $('#search-input').on('input', function () {
+        FilterTopics('');
     });
-
     $('#subject-select').change(function () {
-        var subjects = $(this).val(); // Get selected curriculum values
+        var subjects = $(this).val(); // Get selected subject values
         FilterTopics(subjects);
     });
+
     $('#course-select').change(function () {
-        var courses = $(this).val(); // Get selected curriculum values
-        FilterTopics(courses);
+        var courseId = $(this).val(); // Get selected course option value
+        updateSubjectDropdown(courseId);
+        FilterTopics('');
     });
 
     $('#reset-button').click(function () {

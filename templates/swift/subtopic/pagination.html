@@ -2,16 +2,16 @@
 {% load my_filters %}
 {% block body_block %}
 
-{% if  topics.has_other_pages %}
-    {% get_proper_elided_page_range topics.paginator topics.number as page_range %}
-    <div class="pagination-count">Showing <span>{{ topics.start_index }}</span> to <span>{{ topics.end_index }}</span> of <span>{{ topics.paginator.count }}</span> entries</div>
+{% if  subtopics.has_other_pages %}
+    {% get_proper_elided_page_range subtopics.paginator subtopics.number as page_range %}
+    <div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span> of <span>{{ subtopics.paginator.count }}</span> entries</div>
     <input type="hidden" id="page" value="1" />
     <input type="hidden" id="current_page" value="{{current_page}}" />
     <input type="hidden" id="start_count" value="1" />
     <ul class="pagination mt-0 ml-auto" id="pagination">
-        {% if topics.has_previous %}
+        {% if subtopics.has_previous %}
             <li>
-                <a href="javascript:void(0)" onclick="FilterTopics('{{ topics.previous_page_number }}');" page-val="{{ topics.previous_page_number }}">Previous</a>
+                <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.previous_page_number }}');" page-val="{{ subtopics.previous_page_number }}">Previous</a>
             </li>
         {% else %}
             <li class="disabled"><a href="#" tabindex="-1"></a></li>
@@ -23,20 +23,20 @@
                     <a href="#" class="active">{{ i }}</a>
                 </li>
             {% else %}
-                {% if i == topics.paginator.ELLIPSIS %}
+                {% if i == subtopics.paginator.ELLIPSIS %}
                     <li>
-                        {{ topics.paginator.ELLIPSIS }}
+                        {{ subtopics.paginator.ELLIPSIS }}
                     </li>
                 {% else %}
                     <li>
-                        <a href="javascript:void(0)" onclick="FilterTopics('{{ i }}');" page-val="{{ i }}">{{ i }}</a>
+                        <a href="javascript:void(0)" onclick="FilterSubtopics('{{ i }}');" page-val="{{ i }}">{{ i }}</a>
                     </li>
                 {% endif %}
             {% endif %}
         {% endfor %}
-        {% if topics.has_next %}
+        {% if subtopics.has_next %}
             <li>
-                <a href="javascript:void(0)" onclick="FilterTopics('{{ topics.next_page_number }}');" page-val="{{ topics.next_page_number }}">Next</a>
+                <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.next_page_number }}');" page-val="{{ subtopics.next_page_number }}">Next</a>
             </li>
         {% else %}
             <li class="disabled"><a href="#" tabindex="-1" ></a></li>
@@ -44,7 +44,7 @@
     </ul> 
 
 {% else %}
-<div class="pagination-count">Showing <span>{{ topics.start_index }}</span> to <span>{{ topics.end_index }}</span> of <span>{{ .paginator.count }}</span> entries</div>
+<div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span> of <span>{{ .paginator.count }}</span> entries</div>
 <ul class="pagination mt-0 ml-auto" id="pagination">
     <li><a href="#" class="active">1</a></li>
   </ul> 

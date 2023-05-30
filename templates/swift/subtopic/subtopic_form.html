@@ -1,5 +1,5 @@
 <div class="formbg-inner">
-    <div class="edit-topic-form">
+    <div class="edit-subtopic-form">
         {% if id %}
         <input type="hidden" value="" id="form_url" name="form_url">
         {% else %}
@@ -21,7 +21,22 @@
             <p class="text-danger mt-2 mb-0">{{ form.subject.errors.as_text }}</p>
         </div>
         <div class="field padding-bottom--24">
-            <input class="topic-submit" id="topic-submit" type="submit" name="submit" value="Save">
+            <label for="topic">Topic</label>
+            {{ form.topic }}
+            <p class="text-danger mt-2 mb-0">{{ form.topic.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <label for="lessons">Lessons</label>
+            {{ form.lessons }}
+            <p class="text-danger mt-2 mb-0">{{ form.lessons.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <label for="objectives">Objectives</label>
+            {{ form.objectives }}
+            <p class="text-danger mt-2 mb-0">{{ form.objective.errors.as_text }}</p>
+        </div>
+        <div class="field padding-bottom--24">
+            <input class="subtopic-submit" id="subtopic-submit" type="submit" name="submit" value="Save">
         </div>
     </div>
 </div>

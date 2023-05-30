@@ -1,7 +1,7 @@
 {% extends "swift/layout/user_base.html" %} {% load static %} {% block body_block %}
 <div class="content-inner full-screen">
     <div class="page-block">
-        <input type="hidden" value="{% url 'appswift:topic' %}" id="load_topic">
+        <input type="hidden" value="{% url 'appswift:subtopic' %}" id="load_subtopic">
         <div class="d-flex justify-content-between">
             <h1 class="page-block-title" style="margin-top: 21px;">Subtopic</h1>
             <div class="row">
@@ -14,10 +14,10 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select id="course-select" name="course" class="form-control">
-                        <option value="" selected>- All Courses -</option>
-                        {% for course in courses %}
-                        <option value="{{ course.id }}">{{ course.name }}</option>
+                    <select id="topic-select" name="subject" class="form-control">
+                        <option value="" selected>- All Topics -</option>
+                        {% for topic in topics %}
+                        <option value="{{ topic.id }}">{{ topic.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -31,8 +31,8 @@
             
 
             <div style="margin-right: 31px;margin-top: 19px;">
-                <a class="add-topic" id="create_topic" data-fancybox="" data-src="#topic-popup"
-                    data-url="{% url 'appswift:create_topic'%}">
+                <a class="add-subtopic" id="create_subtopic" data-fancybox="" data-src="#subtopic-popup"
+                    data-url="{% url 'appswift:create_subtopic'%}">
                     <button>ADD</button>
                 </a>
             </div>
@@ -46,41 +46,44 @@
                         <th>Name</th>
                         <th>Course</th>
                         <th>Subject</th>
+                        <th>Topic</th>
+                        <th>Lessons</th>
+                        <th>Objectives</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
-                <tbody id="topic-tbody">
+                <tbody id="subtopic-tbody">
                     {% include 'swift/subtopic/subtopic_list.html' %}
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="pagination-outer align-items-center justify-content-between d-flex" id="topic-pagination">
+    <div class="pagination-outer align-items-center justify-content-between d-flex" id="subtopic-pagination">
         {% include 'swift/subtopic/pagination.html' %}
     </div>
 
     <div>
-        <!-- topic Add form starts-->
-        <div class="add-topic" id="topic-popup" style="display:none;">
-            <div class="pop-body" id="topic-div">
+        <!-- subtopic Add form starts-->
+        <div class="add-subtopic" id="subtopic-popup" style="display:none;">
+            <div class="pop-body" id="subtopic-div">
                 <div class="formbg-inner">
-                    <form method="post" action="" class="TopicsForm" id="TopicsForm" name="TopicsForm">
+                    <form method="post" action="" class="SubtopicsForm" id="SubtopicsForm" name="SubtopicsForm">
                         {% csrf_token %}
-                        <h2 class="padding-bottom--15" id="popup_head">Add Topic</h2>
-                        <div class="topic-form" id="topic-form-div">
+                        <h2 class="padding-bottom--15" id="popup_head">Add Subtopic</h2>
+                        <div class="subtopic-form" id="subtopic-form-div">
 
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <!-- topic Add form ends -->
+        <!-- subtopic Add form ends -->
     </div>
 </div>
 </div>
 {% endblock body_block %}
 {% block page_script %}
-<script src="{% static '/swift/assets/js/topic.js' %}?v={% now 'd_m_yH:i:s'%}"></script>
+<script src="{% static '/swift/assets/js/subtopic.js' %}?v={% now 'd_m_yH:i:s'%}"></script>
 {% endblock page_script %}

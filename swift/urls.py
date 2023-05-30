@@ -34,6 +34,7 @@ from swift.views.topic import (
     TopicUpdate,
     TopicDelete,
     FilteredSubjectsView,
+    GetSubjectsView,
 )
 
 from swift.views.subtopic import (
@@ -41,7 +42,9 @@ from swift.views.subtopic import (
     SubtopicCreate,
     SubtopicUpdate,
     SubtopicDelete,
-    FilteredTopicView,
+    FilteredSubtopicView,
+    FilteredTopicsView,
+    
 )
 
 app_name = "appswift"
@@ -83,10 +86,15 @@ urlpatterns = [
     path("topic/<int:pk>/update/", TopicUpdate.as_view(), name="update_topic"),
     path("topic/<int:pk>/delete/", TopicDelete.as_view(), name="delete_topic"),
     path("topic/filter/", FilteredSubjectsView.as_view(), name="filter_topic"),
-     # Subopic
+    path("topic/searchfilter/", GetSubjectsView.as_view(), name="searchfilter_topic"),
+    
+    # Subtopic
     path("subtopic/", SubtopicView.as_view(), name="subtopic"),
     path("subtopic/create/", SubtopicCreate.as_view(), name="create_subtopic"),
     path("subtopic/<int:pk>/update/", SubtopicUpdate.as_view(), name="update_subtopic"),
     path("subtopic/<int:pk>/delete/", SubtopicDelete.as_view(), name="delete_subtopic"),
-    path("subtopic/filter/", FilteredTopicView.as_view(), name="filter_subtopic"),
+    path("subtopic/filter/", FilteredSubtopicView.as_view(), name="filter_subtopic"),
+    path("subtopic/searchfilter/", FilteredTopicsView.as_view(), name="searchfilter_subtopic"),
+    
+    
 ]

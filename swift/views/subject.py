@@ -15,20 +15,20 @@ from django.shortcuts import get_object_or_404
 
 class SubjectsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        query = request.GET.get("search")
-        courses = request.GET.get("course")
-        condition ={"is_active":True}
-        if query:
-            condition["name__icontains"] = query
+        querys = request.GET.get("searchs")
+        courses = request.GET.get("course")  # selected courses values as a list
+        condition = {"is_active": True}
+        if querys:
+            condition["name__icontains"] = querys
         if courses:
             condition["course_id"] = courses
-        subjects = Subject.objects.select_related("course").filter(**condition).order_by("-id")
+        subjects = Subject.objects.select_related('course').filter(**condition).order_by("-id")
 
-        course_list = Course.objects.all()
-        
+        course_list = Course.objects.all()  # Retrieve all courses options
+    
         context = {}
-        context["courses"] = course_list  # Add course to the context
-
+        context["courses"] = course_list  # Add courses to the context
+        
         try:
             page = int(request.GET.get("page", 1))
         except ValueError:
@@ -42,7 +42,7 @@ class SubjectsView(LoginRequiredMixin, View):
         except EmptyPage:
             subjects = paginator.page(paginator.num_pages)
 
-        context["subject"], context["current_page"] = subjects, page
+        context["subjects"], context["current_page"] = subjects, page
 
         if is_ajax(request=request):
             response = {
