@@ -259,7 +259,7 @@ class TopicDelete(LoginRequiredMixin, View):
         return JsonResponse(response)
 
 
-
+#  add filter
 class FilteredSubjectsView(View):
     def get(self, request):
         course_id = request.GET.get('course_id')
@@ -268,7 +268,7 @@ class FilteredSubjectsView(View):
         return JsonResponse({'subjects': subject_list})
     
 
-
+# searchfilter
 class GetSubjectsView(View):
     def get(self, request, *args, **kwargs):
         course_id = request.GET.get("course_id")

@@ -94,12 +94,14 @@ function updateSubjectDropdown(courseId) {
                 value: '',
                 text: '- All Subjects -'
             }));
-            $.each(response.subjects, function (index, subject) {
-                subjectSelect.append($('<option>', {
-                    value: subject.id,
-                    text: subject.name
-                }));
-            });
+            if (courseId !== '') {
+                $.each(response.subjects, function (index, subject) {
+                    subjectSelect.append($('<option>', {
+                        value: subject.id,
+                        text: subject.name
+                    }));
+                });
+            }
         }
     });
 }
@@ -129,9 +131,11 @@ $(document).ready(function () {
         $('#subject-select').val('');
         $('#course-select').val('');
         $('#reset-input').val('true');
-        FilterTopics('');
+        updateSubjectDropdown(''); // Pass null instead of empty string
+        filterTopics(''); // Call the updated function name "filterTopics" instead of "FilterTopics"
     });
 });
+
 
 
 

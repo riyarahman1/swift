@@ -1,9 +1,9 @@
 <div class="formbg-inner">
     <div class="edit-subtopic-form">
         {% if id %}
-        <input type="hidden" value="" id="form_url" name="form_url">
+        <input type="hidden" value="{% url 'appswift:update_subtopic' id %}" id="form_url" name="form_url">
         {% else %}
-        <input type="hidden" value="" id="form_url" name="form_url">
+        <input type="hidden" value="{% url 'appswift:create_subtopic' %}" id="form_url" name="form_url">
         {% endif %}
         <div class="field padding-bottom--24">
             <label for="name">Name</label>

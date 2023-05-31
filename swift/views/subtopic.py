@@ -74,7 +74,6 @@ class SubtopicView(LoginRequiredMixin, View):
 
         form = SubTopicForm(initial={"subject": subject})
 
-
         context["form"] = form
         return renderfile(request, "subtopic", "index", context)
 
@@ -92,56 +91,58 @@ class SubtopicCreate(LoginRequiredMixin, View):
         }
         return JsonResponse(data)
 
-    
     def post(self, request, *args, **kwargs):
         response = {}
         form = SubTopicForm(request.POST or None)
         if form.is_valid():
             try:
-                # with transaction.atomic():
-                name = request.POST.get("name", None)
-                topic = request.POST.get("topic", None)
-                lessons = request.POST.get("lessons", None)
-                objectives = request.POST.get("objectives", None)
-                
-                # CHECK THE DATA EXISTS
+                name = form.cleaned_data.get("name")
+                topic = form.cleaned_data.get("topic")
+                lessons = form.cleaned_data.get("lessons")
+                objectives = form.cleaned_data.get("objectives")
+
                 if not SubTopic.objects.filter(name=name).exists():
                     obj = SubTopic.objects.create(
-                         name=name, topic_id=topic,lessons_id=lessons,objectives_id=objectives
-                     )
+                        name=name,
+                        topic_id=topic,
+                        lessons_id=lessons,
+                        objectives_id=objectives,
+                    )
 
                     # log entry
-                    log_data = {}
-                    log_data["module_name"] = "SubTopic"
-                    log_data["action_type"] = CREATE
-                    log_data["log_message"] = "SubTopic Created"
-                    log_data["status"] = SUCCESS
-                    log_data["model_object"] = obj
-                    log_data["db_data"] = {"name": name}
-                    log_data["app_visibility"] = True
-                    log_data["web_visibility"] = True
-                    log_data["error_msg"] = ""
-                    log_data["fwd_link"] = "/subtopic/"
+                    log_data = {
+                        "module_name": "SubTopic",
+                        "action_type": "CREATE",
+                        "log_message": "SubTopic Created",
+                        "status": "SUCCESS",
+                        "model_object": obj,
+                        "db_data": {"name": name},
+                        "app_visibility": True,
+                        "web_visibility": True,
+                        "error_msg": "",
+                        "fwd_link": "/subtopic/",
+                    }
                     LogUserActivity(request, log_data)
 
                     response["status"] = True
                     response["message"] = "Added successfully"
                 else:
                     response["status"] = False
-                    response["message"] = "Topic Already exists"
+                    response["message"] = "Subtopic already exists"
 
             except Exception as error:
-                log_data = {}
-                log_data["module_name"] = "SubTopic"
-                log_data["action_type"] = CREATE
-                log_data["log_message"] = "SubTopic updation failed"
-                log_data["status"] = FAILED
-                log_data["model_object"] = None
-                log_data["db_data"] = {}
-                log_data["app_visibility"] = False
-                log_data["web_visibility"] = False
-                log_data["error_msg"] = error
-                log_data["fwd_link"] = "/subtopic/"
+                log_data = {
+                    "module_name": "SubTopic",
+                    "action_type": "CREATE",
+                    "log_message": "SubTopic updation failed",
+                    "status": "FAILED",
+                    "model_object": None,
+                    "db_data": {},
+                    "app_visibility": False,
+                    "web_visibility": False,
+                    "error_msg": str(error),
+                    "fwd_link": "/subtopic/",
+                }
                 LogUserActivity(request, log_data)
 
                 response["status"] = False
@@ -149,7 +150,7 @@ class SubtopicCreate(LoginRequiredMixin, View):
         else:
             response["status"] = False
             context = {"form": form}
-            response["title"] = "Add SubTopic"
+            response["title"] = "Add Subtopic"
             response["valid_form"] = False
             response["template"] = render_to_string(
                 "swift/subtopic/subtopic_form.html", context, request=request
@@ -244,7 +245,6 @@ class SubtopicUpdate(LoginRequiredMixin, View):
             return JsonResponse(data)
 
 
-
 class SubtopicDelete(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         id = kwargs.get("pk", None)
@@ -271,31 +271,154 @@ class SubtopicDelete(LoginRequiredMixin, View):
         response["message"] = "SubTopic deleted successfully"
         return JsonResponse(response)
 
+
 # add filter
+# class FilteredSubtopicView(View):
+#     def get(self, request):
+#         course_id = request.GET.get("course")
+#         subject_id = request.GET.get("subject")
+#         topic_id = request.GET.get("topic")
+#         print('eeeeeeeeeee',subject_id,course_id,topic_id)
+ 
+#         if course_id and subject_id and topic_id:
+#             subtopics = SubTopic.objects.filter(
+#                 topic_id=topic_id,
+#                 topic__subject_id=subject_id,
+#                 topic__subject__course_id=course_id,
+#             )
+#         else:
+#             subtopics = SubTopic.objects.none()
+#         print('ddddddddddd',subject_id,course_id,topic_id)
+#         subtopic_list = [
+#             {"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics
+#         ]
+
+#         return JsonResponse({"subtopics": subtopic_list})
+
+
+
+# ///////////correct code
+
+# class FilteredSubtopicView(View):
+#     def get(self, request):
+#         topic_id = request.GET.get("topic")
+#         print('eeeeeeeeeee', topic_id)
+
+#         if topic_id:
+#             try:
+#                 topic = Topic.objects.get(id=topic_id)
+#                 subject_id = topic.subject_id
+#                 course_id = topic.subject.course_id
+#                 print('Subject ID:', subject_id)
+#                 print('Course ID:', course_id)
+
+#                 subtopics = SubTopic.objects.filter(
+#                     topic_id=topic_id,
+#                     topic__subject_id=subject_id,
+#                     topic__subject__course_id=course_id,
+#                 )
+#                 subtopic_list = [
+#                     {"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics
+#                 ]
+#                 return JsonResponse({"subtopics": subtopic_list})
+#             except Topic.DoesNotExist:
+#                 return JsonResponse({"error": "Topic not found"}, status=404)
+#         else:
+#             return JsonResponse({"error": "Invalid topic ID"}, status=400)
+        
+        
+# class FilteredSubtopicView(View):
+#     def get(self, request):
+#         topic_id = request.GET.get("topic")
+#         print('Topic ID:', topic_id)
+
+#         if topic_id:
+#             try:
+#                 topic = Topic.objects.get(id=topic_id)
+#                 subject_id = topic.subject_id
+#                 course_id = topic.subject.course_id
+#                 print('Subject ID:', subject_id)
+#                 print('Course ID:', course_id)
+
+#                 subjects = Subject.objects.filter(course_id=course_id)
+#                 subject_list = [{"id": subject.id, "name": subject.name} for subject in subjects]
+
+#                 courses = Course.objects.filter(id=course_id)
+#                 course_list = [{"id": course.id, "name": course.name} for course in courses]
+
+#                 topics = Topic.objects.filter(subject_id=subject_id)
+#                 topic_list = [{"id": topic.id, "name": topic.name} for topic in topics]
+
+#                 response_data = {
+#                     "subjects": subject_list,
+#                     "courses": course_list,
+#                     "topics": topic_list,
+#                 }
+#                 print('Response:', response_data)
+#                 return JsonResponse(response_data)
+#             except Topic.DoesNotExist:
+#                 error_message = "Topic not found"
+#                 print('Error:', error_message)
+#                 return JsonResponse({"error": error_message}, status=404)
+#         else:
+#             error_message = "Invalid topic ID"
+#             print('Error:', error_message)
+#             return JsonResponse({"error": error_message}, status=400)
+
+
 class FilteredSubtopicView(View):
     def get(self, request):
-        course_id = request.GET.get("course_id")
-        subject_id = request.GET.get("subject_id")
+        topic_id = request.GET.get("topic")
+        print('Topic ID:', topic_id)
 
-        if course_id and subject_id:
-            subtopics = SubTopic.objects.filter(
-                topic__subject__course_id=course_id,
-                topic__subject_id=subject_id
-            )
+        if topic_id:
+            try:
+                topic = Topic.objects.get(id=topic_id)
+                subject_id = topic.subject_id
+                course_id = topic.subject.course_id
+                print('Subject ID:', subject_id)
+                print('Course ID:', course_id)
+
+                subjects = topic.subject.course.course_subjects.all()
+                subject_list = [{"id": subject.id, "name": subject.name} for subject in subjects]
+
+                courses = Course.objects.filter(course_subjects__in=subjects)
+                course_list = [{"id": course.id, "name": course.name} for course in courses]
+
+                topics = Topic.objects.filter(subject_id=subject_id)
+                topic_list = [{"id": topic.id, "name": topic.name} for topic in topics]
+
+                response_data = {
+                    "subjects": subject_list,
+                    "courses": course_list,
+                    "topics": topic_list,
+                }
+                print('Response:', response_data)
+                return JsonResponse(response_data)
+            except Topic.DoesNotExist:
+                error_message = "Topic not found"
+                print('Error:', error_message)
+                return JsonResponse({"error": error_message}, status=404)
         else:
-            subtopics = SubTopic.objects.none()
+            error_message = "Invalid topic ID"
+            print('Error:', error_message)
+            return JsonResponse({"error": error_message}, status=400)
 
-        subtopic_list = [
-            {"id": subtopic.id, "name": subtopic.name} for subtopic in subtopics
-        ]
-        return JsonResponse({"subtopics": subtopic_list})
+
+
 
 # searchfilter
 class FilteredTopicsView(View):
     def get(self, request):
         subject_id = request.GET.get("subject_id")
         subject = get_object_or_404(Subject, id=subject_id) if subject_id else None
-        course_id = subject.course_id
-        topics = Topic.objects.filter(subject_id=subject_id, subject__course_id=course_id)
-        topic_list = [{'id': topic.id, 'name': topic.name} for topic in topics]
-        return JsonResponse({'topics': topic_list})
+        course_id = subject.course_id if subject else None
+
+        if subject_id:
+            topics = Topic.objects.filter(subject_id=subject_id, subject__course_id=course_id)
+        else:
+            topics = Topic.objects.all()
+
+        topic_list = [{"id": topic.id, "name": topic.name} for topic in topics]
+
+        return JsonResponse({"topics": topic_list})
