@@ -201,6 +201,8 @@ class SubtopicUpdate(LoginRequiredMixin, View):
                 obj.objectives = objectives
                 obj.save()
 
+
+
                 # log entry
                 log_data = {
                     "module_name": "SubTopic",
