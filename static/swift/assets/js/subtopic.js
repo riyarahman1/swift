@@ -167,7 +167,6 @@ $(document).on('click', '#create_subtopic', function (event) {
 });
 
 // Event handler for topic change
-// Event handler for topic change
 $(document).off('change', '#id_topic').on('change', '#id_topic', function () {
     var topicId = $(this).val();
     $.ajax({
@@ -226,80 +225,6 @@ $(document).off('change', '#id_subject').on('change', '#id_subject', function ()
 
 
 
-
-// $(document).on('click', '#create_subtopic', function (event) {
-//     event.preventDefault();
-//     var url = $(this).attr('data-url');
-//     $.ajax({
-//         url: url,
-//         headers: { "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val() },
-//         method: "GET",
-//         data: {},
-//         beforeSend: function () {
-//             $('#subtopic-form-div').html('Loading...');
-//         },
-//         success: function (response) {
-//             $('#subtopic-form-div').html(response.template);
-//             $('#popup_head').html(response.title);
-
-//             $(document).on('change', '#id_topic', function () {
-//                 var topicId = $(this).val();
-
-//                 $.ajax({
-//                     url: '/subtopic/filter/',
-//                     type: 'GET',
-//                     data: {
-//                         'topic_id': topicId
-//                     },
-//                     success: function (response) {
-//                         var subjectSelect = $('#id_subject');
-//                         subjectSelect.empty();
-
-//                         $.each(response.subjects, function (index, subject) {
-//                             subjectSelect.append($('<option>', {
-//                                 value: subject.id,
-//                                 text: subject.name
-//                             }));
-//                         });
-
-//                         // Trigger the change event for the subject dropdown to fetch and populate the course dropdown
-//                         subjectSelect.trigger('change');
-//                     }
-//                 });
-//             });
-
-//             $(document).on('change', '#id_subject', function () {
-//                 var subjectId = $(this).val();
-
-//                 $.ajax({
-//                     url: '/subtopic/filter/',
-//                     type: 'GET',
-//                     data: {
-//                         'subject_id': subjectId
-//                     },
-//                     success: function (response) {
-//                         var courseSelect = $('#id_course');
-//                         courseSelect.empty();
-
-//                         // Add the retrieved courses to the course dropdown
-//                         $.each(response.courses, function (index, course) {
-//                             courseSelect.append($('<option>', {
-//                                 value: course.id,
-//                                 text: course.name
-//                             }));
-//                         });
-//                     }
-//                 });
-//             });
-//         },
-//     });
-// });
-
-
-
-
-
-
 $(document).on('click', '.subtopic-edit', function (event) {
     event.preventDefault();
     var url = $(this).attr('data-url');
@@ -350,7 +275,6 @@ $(document).on('click', '.subtopic-edit', function (event) {
         }
     });
 });
-
 
 
 

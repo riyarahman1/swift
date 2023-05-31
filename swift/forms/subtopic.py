@@ -45,32 +45,30 @@ class SubTopicForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.is_bound and self.data.get("topic"):
-            topic_id = self.data.get("topic")
-            subject_ids = Subject.objects.filter(topic__id=topic_id).values_list(
-                "id", flat=True
-            )
+        if self.is_bound and self.data.get("subject"):
+            subject_id = self.data.get("subject")
+            print("Subject ID:", subject_id)
+            subject_ids = Subject.objects.filter(id=subject_id).values_list("id", flat=True)
+            print("Subject IDs:", subject_ids)
             self.fields["subject"].queryset = Subject.objects.filter(id__in=subject_ids)
         elif self.instance.pk and self.instance.topic:
             topic_id = self.instance.topic_id
-            subject_ids = Subject.objects.filter(topic__id=topic_id).values_list(
-                "id", flat=True
-            )
+            subject_ids = Subject.objects.filter(topic__id=topic_id).values_list("id", flat=True)
             self.fields["subject"].queryset = Subject.objects.filter(id__in=subject_ids)
         else:
             self.fields["subject"].queryset = Subject.objects.none()
 
         if self.is_bound and self.data.get("subject"):
             subject_id = self.data.get("subject")
-            course_ids = Course.objects.filter(
-                course_subjects__id=subject_id
-            ).values_list("id", flat=True)
+            print("Subject ID:", subject_id)
+            course_ids = Course.objects.filter(course_subjects__id=subject_id).values_list("id", flat=True)
             self.fields["course"].queryset = Course.objects.filter(id__in=course_ids)
+            print("Course IDs:", course_ids)
+
         elif self.instance.pk and self.instance.subject:
             subject_id = self.instance.subject_id
             course_ids = Course.objects.filter(
-                course_subjects__id=subject_id
-            ).values_list("id", flat=True)
+                course_subjects__id=subject_id).values_list("id", flat=True)
             self.fields["course"].queryset = Course.objects.filter(id__in=course_ids)
         else:
             self.fields["course"].queryset = Course.objects.none()
