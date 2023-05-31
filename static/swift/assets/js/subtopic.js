@@ -147,7 +147,6 @@ $(document).ready(function () {
 });
 
 
-
 $(document).on('click', '#create_subtopic', function (event) {
     event.preventDefault();
     var url = $(this).attr('data-url');
