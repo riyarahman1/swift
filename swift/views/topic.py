@@ -157,10 +157,12 @@ class TopicUpdate(LoginRequiredMixin, View):
         context = {"form": form, "id": id, "course_id": obj.subject.course_id}
         data["status"] = True
         data["title"] = "Edit Topic"
+        data["course_id"] = obj.subject.course_id  # Include course_id in the data dictionary
         data["template"] = render_to_string(
             "swift/topic/topic_form.html", context, request=request
         )
         return JsonResponse(data)
+
 
     def post(self, request, *args, **kwargs):
         data, response = {}, {}
@@ -272,5 +274,5 @@ class FilteredSubjectsView(View):
 class GetSubjectsView(View):
     def get(self, request, *args, **kwargs):
         course_id = request.GET.get("course_id")
-        subjects = Subject.objects.filter(course_id=course_id).values("id", "name")
+        subjects = Subject.objects.filter(subject__course_id=course_id).values("id", "name")
         return JsonResponse({"subjects": list(subjects)})    

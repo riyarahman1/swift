@@ -145,7 +145,7 @@ function DeleteSubject(id) {
     swal({
         icon: "warning",
         title: "Verify Details",
-        text: "Are you sure you want to delete this record?",
+        text: "Are you sure you want to delete this subject?",
         buttons: true,
         dangerMode: true,
     }).then(function (okey) {

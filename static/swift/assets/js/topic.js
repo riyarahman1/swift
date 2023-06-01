@@ -111,7 +111,7 @@ $(document).ready(function () {
         e.preventDefault();
         FilterTopics('');
     });
-    
+
     $('#search-input').on('input', function () {
         FilterTopics('');
     });
@@ -132,11 +132,11 @@ $(document).ready(function () {
         $('#course-select').val('');
         $('#reset-input').val('true');
         updateSubjectDropdown(''); // Pass null instead of empty string
-        filterTopics(''); // Call the updated function name "filterTopics" instead of "FilterTopics"
+        FilterTopics('');
     });
+
 });
-
-
+// -------------------------------------------------------------create topic----------------------------------------------
 
 
 $(document).on('click', '#create_topic', function (event) {
@@ -168,8 +168,6 @@ $(document).on('click', '#create_topic', function (event) {
                     success: function (response) {
 
                         $('#id_subject').empty();
-
-
                         $.each(response.subjects, function (index, subject) {
                             $('#id_subject').append($('<option>', {
                                 value: subject.id,
@@ -201,6 +199,9 @@ $(document).on('click', '.topic-edit', function (event) {
             $('#topic-form-div').html(response.template);
             $('#popup_head').html(response.title);
 
+            // Set the value for the id_course select element
+            var courseSelect = $('#id_course');
+            courseSelect.val(response.course_id);
 
             $('#id_course').change(function () {
                 var course_id = $(this).val();
@@ -238,13 +239,14 @@ $(document).on('click', '.topic-edit', function (event) {
 
 
 
+
 // Function to delete topic
 function DeleteTopic(id) {
     var url = '/topic/' + String(id) + '/delete/'
     swal({
         icon: "warning",
         title: "Verify Details",
-        text: "Are you sure you want to delete this record?",
+        text: "Are you sure you want to delete this Topic?",
         buttons: true,
         dangerMode: true,
     }).then(function (okey) {

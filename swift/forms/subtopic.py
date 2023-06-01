@@ -13,7 +13,7 @@ class SubTopicForm(forms.ModelForm):
     topic = forms.ModelChoiceField(
         label="Topic",
         widget=forms.Select(attrs={"class": "form-control", "id": "id_topic"}),
-        queryset=Topic.objects.all(),
+        queryset=Topic.objects.none(),
         required=True,
     )
     subject = forms.ModelChoiceField(
@@ -25,7 +25,7 @@ class SubTopicForm(forms.ModelForm):
     course = forms.ModelChoiceField(
         label="Course",
         widget=forms.Select(attrs={"class": "form-control", "id": "id_course"}),
-        queryset=Course.objects.none(),
+        queryset=Course.objects.all(),
         required=True,
     )
     lessons = forms.CharField(
@@ -44,35 +44,23 @@ class SubTopicForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.is_bound and self.data.get("subject"):
-            subject_id = self.data.get("subject")
-            print("Subject ID:", subject_id)
-            subject_ids = Subject.objects.filter(id=subject_id).values_list("id", flat=True)
-            print("Subject IDs:", subject_ids)
-            self.fields["subject"].queryset = Subject.objects.filter(id__in=subject_ids)
-        elif self.instance.pk and self.instance.topic:
-            topic_id = self.instance.topic_id
-            subject_ids = Subject.objects.filter(topic__id=topic_id).values_list("id", flat=True)
-            self.fields["subject"].queryset = Subject.objects.filter(id__in=subject_ids)
-        else:
-            self.fields["subject"].queryset = Subject.objects.none()
+        super(SubTopicForm, self).__init__(*args, **kwargs)
+        self.fields["topic"].queryset = Topic.objects.none()
+        self.fields["subject"].queryset = Subject.objects.none()
 
-        if self.is_bound and self.data.get("subject"):
-            subject_id = self.data.get("subject")
-            print("Subject ID:", subject_id)
-            course_ids = Course.objects.filter(course_subjects__id=subject_id).values_list("id", flat=True)
-            self.fields["course"].queryset = Course.objects.filter(id__in=course_ids)
-            print("Course IDs:", course_ids)
+        if "course" in self.data:
+            try:
+                course_id = int(self.data.get("course"))
+                self.fields["subject"].queryset = Subject.objects.filter(course_id=course_id)
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty queryset
 
-        elif self.instance.pk and self.instance.subject:
-            subject_id = self.instance.subject_id
-            course_ids = Course.objects.filter(
-                course_subjects__id=subject_id).values_list("id", flat=True)
-            self.fields["course"].queryset = Course.objects.filter(id__in=course_ids)
-        else:
-            self.fields["course"].queryset = Course.objects.none()
-
+        if "subject" in self.data:
+            try:
+                subject_id = int(self.data.get("subject"))
+                self.fields["topic"].queryset = Topic.objects.filter(subject_id=subject_id)
+            except (ValueError, TypeError):
+                pass
     class Meta:
         model = SubTopic
         fields = ["name", "topic", "subject", "course", "lessons", "objectives"]

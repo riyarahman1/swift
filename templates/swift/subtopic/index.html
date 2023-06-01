@@ -3,41 +3,55 @@
     <div class="page-block">
         <input type="hidden" value="{% url 'appswift:subtopic' %}" id="load_subtopic">
         <div class="d-flex justify-content-between">
-            <h1 class="page-block-title" style="margin-top: 21px;">Subtopic</h1>
-            <div class="row">
-                <div class="col-md-3">
-                    <select id="subject-select" name="subject" class="form-control">
-                        <option value="" selected>- All Subjects -</option>
-                        {% for subject in subjects %}
-                        <option value="{{ subject.id }}">{{ subject.name }}</option>
-                        {% endfor %}
-                    </select>
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h1 class="page-block-title">Subtopic</h1>
                 </div>
-                <div class="col-md-3">
-                    <select id="topic-select" name="topic" class="form-control">
-                        <option value="" selected>- All Topics -</option>
-                        {% for topic in topics %}
-                        <option value="{{ topic.id }}">{{ topic.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-md-12" style="align-items: center;margin-left: 27%;margin-top: -2%;margin-bottom: 40px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <select id="course-select" name="course" class="form-control">
+                                <option value="" selected>- All Course -</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="subject-select" name="subject" class="form-control">
+                                <option value="" selected>- All Subjects -</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="topic-select" name="topic" class="form-control">
+                                <option value="" selected>- All Topics -</option>
+                                {% for topic in topics %}
+                                <option value="{{ topic.id }}">{{ topic.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="text" name="search" id="search-input" placeholder="Search" aria-label="Search">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-secondary" type="button" name="reset" id="reset-button">Reset</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <input class="form-control" type="text" name="search" id="search-input" placeholder="Search" aria-label="Search">
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-outline-secondary" type="button" name="reset" id="reset-button">Reset</button>
-                </div>
-            </div>            
+            </div>
             
-
-            <div style="margin-right: 31px;margin-top: 19px;">
+            <div style="margin-right: 31px;">
                 <a class="add-subtopic" id="create_subtopic" data-fancybox="" data-src="#subtopic-popup"
                     data-url="{% url 'appswift:create_subtopic'%}">
                     <button>ADD</button>
                 </a>
             </div>
         </div>
-
+        
+    
         <div>
             <table id="search-results">
                 <thead>
