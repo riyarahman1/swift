@@ -20,7 +20,7 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status) {
                         $(".carousel__button").click()
-                        FilterTopics('')
+                        FilterSubtopics('')
                         $(".msg_desc").text(response.message)
                         $("#flash_message_success").attr("style", "display:block;")
                         setTimeout(function () {
@@ -229,7 +229,7 @@ $(document).on('click', '#create_subtopic', function (event) {
         success: function (response) {
             $('#subtopic-form-div').html(response.template);
             $('#popup_head').html(response.title);
-
+            
             // Event handler for course change
             $('#id_course').change(function () {
                 var courseId = $(this).val();
