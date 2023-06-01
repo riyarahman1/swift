@@ -103,42 +103,24 @@ class SubtopicCreate(LoginRequiredMixin, View):
         response = {}
         form = SubTopicForm(request.POST or None)
         if form.is_valid():
-            try:
-                subtopic = form.save()
-                # log entry
-                log_data = {
-                    "module_name": "SubTopic",
-                    "action_type": "CREATE",
-                    "log_message": "SubTopic Created",
-                    "status": "SUCCESS",
-                    "model_object": str(subtopic),
-                    "db_data": {"name": subtopic.name},
-                    "app_visibility": True,
-                    "web_visibility": True,
-                    "error_msg": "",
-                    "fwd_link": "/subtopic/",
-                }
-                LogUserActivity(request, log_data)
+            subtopic = form.save()  # Save the form data
+            # log entry
+            log_data = {
+                "module_name": "SubTopic",
+                "action_type": "CREATE",
+                "log_message": "SubTopic Created",
+                "status": "SUCCESS",
+                "model_object": str(subtopic),
+                "db_data": {"name": subtopic.name},
+                "app_visibility": True,
+                "web_visibility": True,
+                "error_msg": "",
+                "fwd_link": "/subtopic/",
+            }
+            LogUserActivity(request, log_data)
 
-                response["status"] = True
-                response["message"] = "Added successfully"
-            except Exception as error:
-                log_data = {
-                    "module_name": "SubTopic",
-                    "action_type": "CREATE",
-                    "log_message": "SubTopic creation failed",
-                    "status": "FAILED",
-                    "model_object": None,
-                    "db_data": {},
-                    "app_visibility": False,
-                    "web_visibility": False,
-                    "error_msg": str(error),
-                    "fwd_link": "/subtopic/",
-                }
-                LogUserActivity(request, log_data)
-
-                response["status"] = False
-                response["message"] = "Something went wrong"
+            response["status"] = True
+            response["message"] = "Added successfully"
         else:
             response["status"] = False
             context = {"form": form}
@@ -163,6 +145,9 @@ class SubtopicUpdate(View):
         data["course_id"] = obj.topic.subject.course_id if obj.topic and obj.topic.subject else None
         data["subject_id"] = subject_id
         data["topic_id"] = topic_id
+        data["name"] = obj.name
+        data["lessons"] = obj.lessons
+        data["objectives"] = obj.objectives
         data["template"] = render_to_string("swift/subtopic/subtopic_form.html", context, request=request)
         return JsonResponse(data)
 
