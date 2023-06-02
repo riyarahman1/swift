@@ -170,7 +170,7 @@ class SubtopicUpdate(View):
         form = SubTopicForm(instance=obj)
         subject_id = obj.topic.subject_id if obj.topic and obj.topic.subject_id else None
         topic_id = obj.topic_id if obj.topic else None
-        context = {"form": form, "id": id, "subject_id": subject_id, "topic_id": topic_id}
+        context = {"form": form, "id": id}
         data["status"] = True
         data["title"] = "Edit SubTopic"
         data["course_id"] = obj.topic.subject.course_id if obj.topic and obj.topic.subject else None
