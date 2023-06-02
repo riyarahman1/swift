@@ -135,7 +135,7 @@ function updateSubjectDropdown(courseId) {
                 }));
             });
 
-            // Trigger change event to update the selected subject
+          
             subjectSelect.trigger('change');
         }
     });

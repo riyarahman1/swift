@@ -157,7 +157,7 @@ class TopicUpdate(LoginRequiredMixin, View):
         context = {"form": form, "id": id, "course_id": obj.subject.course_id}
         data["status"] = True
         data["title"] = "Edit Topic"
-        data["course_id"] = obj.subject.course_id  # Include course_id in the data dictionary
+        data["course_id"] = obj.subject.course_id  
         data["template"] = render_to_string(
             "swift/topic/topic_form.html", context, request=request
         )

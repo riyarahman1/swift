@@ -77,6 +77,8 @@ urlpatterns = [
     path("course/create/", CourseCreate.as_view(), name="create_course"),
     path("course/<int:pk>/update/", CourseUpdate.as_view(), name="update_course"),
     path("course/<int:pk>/delete/", CourseDelete.as_view(), name="delete_course"),
+   
+    
     # Subject
     path("subject/", SubjectsView.as_view(), name="subject"),
     path("subject/create/", SubjectCreate.as_view(), name="create_subject"),

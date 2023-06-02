@@ -3,8 +3,8 @@
     <div class="page-block">
         <input type="hidden" value="{% url 'appswift:topic' %}" id="load_topic">
         <div class="d-flex justify-content-between">
-            <h1 class="page-block-title" style="margin-top: 21px;">Topic</h1>
-            <div class="row">
+            <h1 class="page-block-title" style="margin-top: 5px;">Topic</h1>
+            <div class="row align-items-center">
                 <div class="col-md-3">
                     <select id="course-select" name="course" class="form-control">
                         <option value="" selected>- All Courses -</option>
@@ -17,22 +17,25 @@
                     <select id="subject-select" name="subject" class="form-control">
                         <option value="" selected>- All Subjects -</option>
                         {% for subject in subjects %}
-                        <option value="{{ subject.id }}" data-course="{{ subject.course_id }}">{{ subject.name }}</option>
+                        <option value="{{ subject.id }}" data-course="{{ subject.course_id }}">{{ subject.name }}
+                        </option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input class="form-control" type="text" name="search" id="search-input" placeholder="Search" aria-label="Search">
+                    <input class="form-control" type="text" name="search" id="search-input" placeholder="Search"
+                        aria-label="Search">
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-outline-secondary" type="button" name="reset" id="reset-button">Reset</button>
+                    <button class="btn btn-outline-secondary" type="button" name="reset"
+                        id="reset-button">Reset</button>
                 </div>
             </div>
-            
-            
 
 
-            <div style="margin-right: 31px;margin-top: 19px;">
+
+
+            <div style="margin-right: 31px;margin-top: 43px;">
                 <a class="add-topic" id="create_topic" data-fancybox="" data-src="#topic-popup"
                     data-url="{% url 'appswift:create_topic'%}">
                     <button>ADD</button>

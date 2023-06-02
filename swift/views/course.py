@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from swift.forms.course import CourseForm
 from swift.helper import renderfile, is_ajax, LogUserActivity
-from swift.models import Course, Curriculum
+from swift.models import Course, Curriculum ,Subject,Topic,SubTopic
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.paginator import *
@@ -11,7 +11,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from swift.models import CREATE, UPDATE, SUCCESS, FAILED, DELETE, READ
 from django.db import transaction
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.views.generic import TemplateView
 
 class CourseView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -244,3 +244,6 @@ class CourseDelete(LoginRequiredMixin, View):
         response["status"] = True
         response["message"] = "Course deleted successfully"
         return JsonResponse(response)
+
+
+
