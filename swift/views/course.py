@@ -24,7 +24,7 @@ class CourseView(LoginRequiredMixin, View):
             condition["curriculum_id"] = curriculums
         courses = Course.objects.select_related('curriculum').filter(**condition).order_by("-id")
 
-        curriculums_list = Curriculum.objects.all()  # Retrieve all curriculum options
+        curriculums_list = Curriculum.objects.filter(is_active=True)  # Retrieve all curriculum options
 
         context = {}
         context["curriculums"] = curriculums_list  # Add curriculums to the context

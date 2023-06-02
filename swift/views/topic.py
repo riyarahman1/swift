@@ -26,8 +26,8 @@ class TopicView(LoginRequiredMixin, View):
             condition["subject__course__id"] = courses
         topics = Topic.objects.select_related("subject").filter(**condition).order_by("-id")
 
-        subject_list = Subject.objects.all()  
-        course_list =  Course.objects.all()  
+        subject_list = Subject.objects.filter(is_active=True)
+        course_list = Course.objects.filter(is_active=True)
         if courses:
             subject_list = subject_list.filter(course_id=courses)
         

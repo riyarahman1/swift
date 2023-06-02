@@ -34,9 +34,9 @@ class SubtopicView(LoginRequiredMixin, View):
             SubTopic.objects.select_related("topic").filter(**condition).order_by("-id")
         )
 
-        topic_list = Topic.objects.all()
-        subject_list = Subject.objects.all()
-        course_list = Course.objects.all()
+        topic_list = Topic.objects.filter(is_active=True)
+        subject_list = Subject.objects.filter(is_active=True)
+        course_list = Course.objects.filter(is_active=True)
         
 
         if subjects:
