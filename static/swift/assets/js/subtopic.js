@@ -311,12 +311,11 @@ $(document).on('click', '.subtopic-edit', function (event) {
             $('#subtopic-form-div').html(response.template);
             $('#popup_head').html(response.title);
 
-            // Set course, subject, and topic values
             $('#id_course').val(response.course_id);
             $('#id_subject').val(response.subject_id);
             $('#id_topic').val(response.topic_id);
 
-            // Event handler for course change
+
             $(document).off('change', '#id_course').on('change', '#id_course', function () {
                 var courseId = $(this).val();
                 $.ajax({
@@ -373,12 +372,12 @@ $(document).on('click', '.subtopic-edit', function (event) {
                 });
             });
 
-            // Trigger change event on subject, topic, and course selects in edit
+    
             $('#id_subject').trigger('change');
             $('#id_topic').trigger('change');
             $('#id_course').trigger('change');
 
-            // Set form field values
+
             $('#id_name').val(response.name);
             $('#id_lessons').val(response.lessons);
             $('#id_objectives').val(response.objectives);

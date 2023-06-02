@@ -103,24 +103,55 @@ class SubtopicCreate(LoginRequiredMixin, View):
         response = {}
         form = SubTopicForm(request.POST or None)
         if form.is_valid():
-            subtopic = form.save()  # Save the form data
-            # log entry
-            log_data = {
-                "module_name": "SubTopic",
-                "action_type": "CREATE",
-                "log_message": "SubTopic Created",
-                "status": "SUCCESS",
-                "model_object": str(subtopic),
-                "db_data": {"name": subtopic.name},
-                "app_visibility": True,
-                "web_visibility": True,
-                "error_msg": "",
-                "fwd_link": "/subtopic/",
-            }
-            LogUserActivity(request, log_data)
+            try:
+                # with transaction.atomic():
+                name = request.POST.get("name", None)
+                topic = request.POST.get("topic", None)
+                lessons = request.POST.get("lessons", None)
+                objectives = request.POST.get("objectives", None)
+                
+                # CHECK THE DATA EXISTS
+                if not SubTopic.objects.filter(name=name).exists():
+                    obj = SubTopic.objects.create(
+                         name=name, topic_id=topic,lessons=lessons,objectives=objectives
+                     )
 
-            response["status"] = True
-            response["message"] = "Added successfully"
+                    # log entry
+                    log_data = {}
+                    log_data["module_name"] = "Subtopic"
+                    log_data["action_type"] = CREATE
+                    log_data["log_message"] = "Subtopic Created"
+                    log_data["status"] = SUCCESS
+                    log_data["model_object"] = obj
+                    log_data["db_data"] = {"name": name}
+                    log_data["app_visibility"] = True
+                    log_data["web_visibility"] = True
+                    log_data["error_msg"] = ""
+                    log_data["fwd_link"] = "/subtopic/"
+                    LogUserActivity(request, log_data)
+
+                    response["status"] = True
+                    response["message"] = "Added successfully"
+                else:
+                    response["status"] = False
+                    response["message"] = "Subtopic Already exists"
+
+            except Exception as error:
+                log_data = {}
+                log_data["module_name"] = "Subtopic"
+                log_data["action_type"] = CREATE
+                log_data["log_message"] = "Subtopic updation failed"
+                log_data["status"] = FAILED
+                log_data["model_object"] = None
+                log_data["db_data"] = {}
+                log_data["app_visibility"] = False
+                log_data["web_visibility"] = False
+                log_data["error_msg"] = error
+                log_data["fwd_link"] = "/subtopic/"
+                LogUserActivity(request, log_data)
+
+                response["status"] = False
+                response["message"] = "Something went wrong"
         else:
             response["status"] = False
             context = {"form": form}
