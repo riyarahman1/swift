@@ -288,7 +288,7 @@ class SubtopicDelete(LoginRequiredMixin, View):
 
 
 
-# ----------------------------------------------searchfilter---------------------------------------------------
+# ----------------------------------------------filter---------------------------------------------------
 class FiltersearchSubjectsView(View):
     def get(self, request):
         course_id = request.GET.get("course")
