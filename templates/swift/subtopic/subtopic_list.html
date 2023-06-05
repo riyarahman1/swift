@@ -8,7 +8,6 @@
     <td>{{ subtopic.topic.name }}</td>
     <td>{{ subtopic.lessons }}</td>
     <td>{{ subtopic.objectives }}</td>
-    <td>{{ subtopic.is_active }}</td>
     <td>
         <a href="javascript:;" class="subtopic-edit" id="subtopic-edit" data-fancybox="" data-src="#subtopic-popup"
             data-url="{% url 'appswift:update_subtopic' subtopic.id %}">

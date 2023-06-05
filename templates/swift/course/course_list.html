@@ -4,7 +4,6 @@
     <td>{{forloop.counter0|add:courses.start_index}}</td>
     <td>{{course.name}}</td>
     <td>{{course.curriculum}}</td>
-    <td>{{course.is_active}}</td>
     <td>
         <a href="javascript:;" class="course-edit" id="course-edit" data-fancybox="" data-src="#course-popup"
             data-url="{% url 'appswift:update_course' course.id %}">
