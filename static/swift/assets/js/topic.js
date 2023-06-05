@@ -6,48 +6,65 @@ $(document).ready(function () {
             event.preventDefault();
             var formData = $("#TopicsForm").serializeArray();
             var url = $("#form_url").val()
-            $.ajax({
-                url: url,
-                headers: {
-                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
-                },
-                method: "POST",
-                data: formData,
-                beforeSend: function () {
-                    $("#topic-submit").attr("disabled", "disabled");
-                    $("#topic-submit").val("Saving...");
-                },
-                success: function (response) {
-                    if (response.status) {
-                        $(".carousel__button").click()
-                        FilterTopics('')
-                        $(".msg_desc").text(response.message)
-                        $("#flash_message_success").attr("style", "display:block;")
-                        setTimeout(function () {
-                            $("#flash_message_success").attr("style", "display:none;")
-                        }, 3500)
-                    } else {
-                        if ('message' in response) {
-                            $(".carousel__button").click()
-                            $(".msg_desc").text(response.message)
-                            $("#flash_message_error").attr("style", "display:block;")
-                            setTimeout(function () {
-                                $("#flash_message_error").attr("style", "display:none;")
-                            }, 3500)
-                        } else {
-                            $('#topic-form-div').html(response.template)
-                        }
-                    }
-                },
-                complete: function () {
-                    $("#topic-submit").attr("disabled", false);
-                    $("#topic-submit").val("Save");
-                },
+
+            function showConfirmationDialog() {
+                return Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure you want to proceed?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    allowOutsideClick: false,   // Prevent closing on outside click
+                    allowEscapeKey: false,      // Prevent closing on Escape key press
+                    toast: true,                // Display as toast notification
+                    // position: "top-end",        // Position the toast notification at the top-end
+                    showConfirmButton: true,   // Hide the confirm button in toast mode
+                    timer: 3000,                // Auto-close the toast after 3 seconds
+                });
+            }
+
+
+            showConfirmationDialog().then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        headers: {
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val(),
+                        },
+                        method: "POST",
+                        data: formData,
+                        beforeSend: function () {
+                            $("#topic-submit").attr("disabled", true).val("Saving...");
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                $(".carousel__button").click();
+                                FilterTopics("");
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_success").fadeIn().delay(3500).fadeOut();
+                                form.reset(); // Reset the form to its initial state
+                                $('#myModal').modal('hide'); // Close the modal
+                            } else if ("message" in response) {
+                                $(".carousel__button").click();
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_error").fadeIn().delay(3500).fadeOut();
+                            } else {
+                                $('#topic-form-div').html(response.template);
+                            }
+                        },
+                        complete: function () {
+                            $("#topic-submit").attr("disabled", false).val("Save");
+                       },
+                    });
+                }
             });
         },
     });
+    
 });
-
 
 // Filter,search and reset
 
@@ -81,12 +98,13 @@ function FilterTopics(page) {
 }
 
 function updateSubjectDropdown(courseId) {
+    var data = {
+        'course_id': courseId ? courseId : null
+    };
     $.ajax({
         url: '/topic/searchfilter/',
         type: 'GET',
-        data: {
-            'course_id': courseId
-        },
+        data: data,
         success: function (response) {
             var subjectSelect = $('#subject-select');
             subjectSelect.empty();
@@ -94,7 +112,7 @@ function updateSubjectDropdown(courseId) {
                 value: '',
                 text: '- All Subjects -'
             }));
-            if (courseId !== '') {
+            if (response.subjects) {
                 $.each(response.subjects, function (index, subject) {
                     subjectSelect.append($('<option>', {
                         value: subject.id,
@@ -102,9 +120,18 @@ function updateSubjectDropdown(courseId) {
                     }));
                 });
             }
+
+            // Set the previously selected subject value
+            var selectedSubject = $('#subject-select').data('selected-value');
+            if (selectedSubject) {
+                subjectSelect.val(selectedSubject);
+            }
         }
     });
 }
+
+
+
 
 $(document).ready(function () {
     $('#search-form').submit(function (e) {
@@ -121,19 +148,23 @@ $(document).ready(function () {
     });
 
     $('#course-select').change(function () {
-        var courseId = $(this).val(); // Get selected course option value
-        updateSubjectDropdown(courseId);
+        var courseId = $(this).val();
+        var selectedSubject = $('#subject-select').val(); // Store the selected subject value
+        updateSubjectDropdown(courseId); // Pass the courseId
         FilterTopics('');
     });
-
+    
+    
     $('#reset-button').click(function () {
         $('#search-input').val('');
         $('#subject-select').val('');
         $('#course-select').val('');
         $('#reset-input').val('true');
-        updateSubjectDropdown(''); // Pass null instead of empty string
+        updateSubjectDropdown(null); 
         FilterTopics('');
+        return false; 
     });
+    
 
 });
 // -------------------------------------------------------------create topic----------------------------------------------
@@ -160,7 +191,7 @@ $(document).on('click', '#create_topic', function (event) {
 
                 //  filtered subject options
                 $.ajax({
-                    url: '/topic/filter/',
+                    url: '/topic/searchfilter/',
                     type: 'GET',
                     data: {
                         'course_id': course_id
@@ -205,7 +236,7 @@ $(document).on('click', '.topic-edit', function (event) {
 
             $('#id_course').change(function () {
                 var course_id = $(this).val();
-                var subjectsUrl = '/topic/filter/';
+                var subjectsUrl = '/topic/searchfilter/';
 
                 $.ajax({
                     url: subjectsUrl,
@@ -236,7 +267,6 @@ $(document).on('click', '.topic-edit', function (event) {
         }
     });
 });
-
 
 
 

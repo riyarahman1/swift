@@ -23,22 +23,20 @@ class SubtopicView(LoginRequiredMixin, View):
         if query:
             condition["name__icontains"] = query
         if topics:
-            condition["topic_id"] = topics
+            condition["topic__id"] = topics
         if subjects:
             condition["topic__subject__id"] = subjects
         if courses:
             condition["topic__subject__course__id"] = courses    
-            
 
         subtopics = (
             SubTopic.objects.select_related("topic").filter(**condition).order_by("-id")
         )
 
-        topic_list = Topic.objects.filter(is_active=True)
-        subject_list = Subject.objects.filter(is_active=True)
+        topic_list = Topic.objects.filter(subject__course__is_active=True, is_active=True)
+        subject_list = Subject.objects.filter(course__is_active=True, is_active=True)
         course_list = Course.objects.filter(is_active=True)
         
-
         if subjects:
             topic_list = topic_list.filter(subject_id=subjects)
         if courses:
@@ -48,7 +46,6 @@ class SubtopicView(LoginRequiredMixin, View):
         context["subjects"] = subject_list
         context["topics"] = topic_list
         context["courses"] = course_list
-        
 
         try:
             page = int(request.GET.get("page", 1))
@@ -86,6 +83,7 @@ class SubtopicView(LoginRequiredMixin, View):
 
         context["form"] = form
         return renderfile(request, "subtopic", "index", context)
+
 
 
 class SubtopicCreate(LoginRequiredMixin, View):
@@ -272,7 +270,7 @@ class SubtopicDelete(LoginRequiredMixin, View):
 
         # log entry
         log_data = {}
-        log_data["module_name"] = "Topic"
+        log_data["module_name"] = "SubTopic"
         log_data["action_type"] = DELETE
         log_data["log_message"] = f"Deleted SubTopic {obj.name}"
         log_data["status"] = SUCCESS
@@ -290,84 +288,41 @@ class SubtopicDelete(LoginRequiredMixin, View):
 
 
 
-
-class FilterSubjectsView(View):
-    def get(self, request, *args, **kwargs):
-        topic_id = request.GET.get("topic")
-        course_id = request.GET.get("course")
-
-        if topic_id:
-            subjects = Subject.objects.filter(topic_id=topic_id).values("id", "name")
-        elif course_id:
-            subjects = Subject.objects.filter(course_id=course_id).values("id", "name")
-        else:
-            subjects = []
-
-        data = {"subjects": list(subjects)}
-        return JsonResponse(data)
-
-
-class FilterTopicsView(View):
-    def get(self, request, *args, **kwargs):
-        subject_id = request.GET.get("subject")
-        course_id = request.GET.get("course")
-
-        if subject_id:
-            topics = Topic.objects.filter(subject_id=subject_id).values("id", "name")
-        elif course_id:
-            topics = Topic.objects.filter(subject__course_id=course_id).values("id", "name")
-        else:
-            topics = []
-
-        data = {"topics": list(topics)}
-        return JsonResponse(data)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 # ----------------------------------------------searchfilter---------------------------------------------------
 class FiltersearchSubjectsView(View):
     def get(self, request):
         course_id = request.GET.get("course")
 
         if course_id:
-            subjects = Subject.objects.filter(course_id=course_id).values("id", "name")
+            subjects = Subject.objects.filter(course_id=course_id, is_active=True).values("id", "name")
         else:
-            subjects = Subject.objects.all().values("id", "name")
+            subjects = Subject.objects.filter(is_active=True).values("id", "name")
 
         subject_list = list(subjects)
 
         return JsonResponse({"subjects": subject_list})
 
+
 class FiltersearchCoursesView(View):
     def get(self, request):
-        courses = Course.objects.all().values("id", "name")
+        courses = Course.objects.filter(is_active=True).values("id", "name")
         course_list = list(courses)
         return JsonResponse({"courses": course_list})
+
     
 class FiltersearchTopicsView(View):
     def get(self, request):
         subject_id = request.GET.get("subject")
         course_id = request.GET.get("course")
 
-        if subject_id:
-            topics = Topic.objects.filter(subject_id=subject_id).values("id", "name")
-        elif course_id:
-            topics = Topic.objects.filter(subject__course_id=course_id).values("id", "name")
-        else:
-            topics = Topic.objects.all().values("id", "name")
+        condition = {"is_active": True}
 
+        if subject_id:
+            condition["subject_id"] = subject_id
+        elif course_id:
+            condition["subject__course_id"] = course_id
+
+        topics = Topic.objects.filter(**condition).values("id", "name")
         topic_list = list(topics)
 
         return JsonResponse({"topics": topic_list})

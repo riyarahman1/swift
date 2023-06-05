@@ -24,7 +24,7 @@ class SubjectsView(LoginRequiredMixin, View):
             condition["course_id"] = courses
         subjects = Subject.objects.select_related('course').filter(**condition).order_by("-id")
 
-        course_list = Course.objects.filter(is_active=True)
+        course_list = Course.objects.all()
 
     
         context = {}

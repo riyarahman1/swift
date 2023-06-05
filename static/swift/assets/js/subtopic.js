@@ -6,46 +6,63 @@ $(document).ready(function () {
             event.preventDefault();
             var formData = $("#SubtopicsForm").serializeArray();
             var url = $("#form_url").val()
-            $.ajax({
-                url: url,
-                headers: {
-                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
-                },
-                method: "POST",
-                data: formData,
-                beforeSend: function () {
-                    $("#subtopic-submit").attr("disabled", "disabled");
-                    $("#subtopic-submit").val("Saving...");
-                },
-                success: function (response) {
-                    if (response.status) {
-                        $(".carousel__button").click()
-                        FilterSubtopics('')
-                        $(".msg_desc").text(response.message)
-                        $("#flash_message_success").attr("style", "display:block;")
-                        setTimeout(function () {
-                            $("#flash_message_success").attr("style", "display:none;")
-                        }, 3500)
-                    } else {
-                        if ('message' in response) {
-                            $(".carousel__button").click()
-                            $(".msg_desc").text(response.message)
-                            $("#flash_message_error").attr("style", "display:block;")
-                            setTimeout(function () {
-                                $("#flash_message_error").attr("style", "display:none;")
-                            }, 3500)
-                        } else {
-                            $('#subtopic-form-div').html(response.template)
-                        }
-                    }
-                },
-                complete: function () {
-                    $("#subtopic-submit").attr("disabled", false);
-                    $("#subtopic-submit").val("Save");
-                },
+
+            function showConfirmationDialog() {
+                return Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure you want to proceed?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    toast: true,
+                    showConfirmButton: true,
+                    timer: 3000,
+                });
+            }
+
+
+            showConfirmationDialog().then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        headers: {
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val(),
+                        },
+                        method: "POST",
+                        data: formData,
+                        beforeSend: function () {
+                            $("#subtopic-submit").attr("disabled", true).val("Saving...");
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                $(".carousel__button").click();
+                                FilterSubtopics("");
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_success").fadeIn().delay(3500).fadeOut();
+                                form.reset(); // Reset the form to its initial state
+                                $('#myModal').modal('hide'); // Close the modal
+                            } else if ("message" in response) {
+                                $(".carousel__button").click();
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_error").fadeIn().delay(3500).fadeOut();
+                            } else {
+                                $('#subtopic-form-div').html(response.template);
+                            }
+                        },
+                        complete: function () {
+                            $("#subtopic-submit").attr("disabled", false).val("Save");
+                        },
+                    });
+                }
             });
         },
     });
+    
 });
 
 // -------------------------------------------------------------Filter,search and reset----------------------------------------------
@@ -234,7 +251,7 @@ $(document).on('click', '#create_subtopic', function (event) {
             $('#id_course').change(function () {
                 var courseId = $(this).val();
                 $.ajax({
-                    url: '/subtopic/subjectfilter/',
+                    url: '/filter_subjects/',
                     type: 'GET',
                     data: {
                         'course': courseId
@@ -267,7 +284,7 @@ $(document).on('click', '#create_subtopic', function (event) {
                 var subjectId = $(this).val();
                 var courseId = $('#id_course').val();
                 $.ajax({
-                    url: '/subtopic/topicfilter/',
+                    url: '/filter_topics/',
                     type: 'GET',
                     data: {
                         'subject': subjectId,
@@ -319,7 +336,7 @@ $(document).on('click', '.subtopic-edit', function (event) {
             $(document).off('change', '#id_course').on('change', '#id_course', function () {
                 var courseId = $(this).val();
                 $.ajax({
-                    url: '/subtopic/subjectfilter/',
+                    url: '/filter_subjects/',
                     type: 'GET',
                     data: {
                         'course': courseId
@@ -352,7 +369,7 @@ $(document).on('click', '.subtopic-edit', function (event) {
                 var subjectId = $(this).val();
                 var courseId = $('#id_course').val();
                 $.ajax({
-                    url: '/subtopic/topicfilter/',
+                    url: '/filter_topics/',
                     type: 'GET',
                     data: {
                         'subject': subjectId,
@@ -390,7 +407,7 @@ $(document).on('click', '.subtopic-edit', function (event) {
 
 
 
-// Function to delete topic
+// Function to delete Subtopic
 function DeleteSubtopic(id) {
     var url = '/subtopic/' + String(id) + '/delete/'
     swal({

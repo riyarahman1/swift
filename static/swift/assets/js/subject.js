@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $("#SubjectsForm").validate({
         rules: {},
         messages: {},
@@ -6,43 +7,58 @@ $(document).ready(function () {
             event.preventDefault();
             var formData = $("#SubjectsForm").serializeArray();
             var url = $("#form_url").val()
-            $.ajax({
-                url: url,
-                headers: {
-                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
-                },
-                method: "POST",
-                data: formData,
-                beforeSend: function () {
-                    $("#subject-submit").attr("disabled", "disabled");
-                    $("#subject-submit").val("Saving...");
-                },
-                success: function (response) {
-                    if (response.status) {
-                        $(".carousel__button").click()
-                        FilterSubjects('')
-                        $(".msg_desc").text(response.message)
-                        $("#flash_message_success").attr("style", "display:block;")
-                        setTimeout(function () {
-                            $("#flash_message_success").attr("style", "display:none;")
-                        }, 3500)
-                    } else {
-                        if ('message' in response) {
-                            $(".carousel__button").click()
-                            $(".msg_desc").text(response.message)
-                            $("#flash_message_error").attr("style", "display:block;")
-                            setTimeout(function () {
-                                $("#flash_message_error").attr("style", "display:none;")
-                            }, 3500)
-                        } else {
-                            $('#subject-form-div').html(response.template)
-                        }
-                    }
-                },
-                complete: function () {
-                    $("#subject-submit").attr("disabled", false);
-                    $("#subject-submit").val("Save");
-                },
+            
+              function showConfirmationDialog() {
+                return Swal.fire({
+                    title: "Confirmation",
+                    text: "Are you sure you want to proceed?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "Cancel",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    toast: true,
+                    showConfirmButton: true,
+                    timer: 3000,
+                });
+            }
+    
+            showConfirmationDialog().then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        headers: {
+                            "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val(),
+                        },
+                        method: "POST",
+                        data: formData,
+                        beforeSend: function () {
+                            $("#subject-submit").attr("disabled", true).val("Saving...");
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                $(".carousel__button").click();
+                                FilterSubjects("");
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_success").fadeIn().delay(3500).fadeOut();
+                                form.reset(); // Reset the form to its initial state
+                                $('#myModal').modal('hide'); // Close the modal
+                            } else if ("message" in response) {
+                                $(".carousel__button").click();
+                                $(".msg_desc").text(response.message);
+                                $("#flash_message_error").fadeIn().delay(3500).fadeOut();
+                            } else {
+                                $('#subject-form-div').html(response.template);
+                            }
+                        },
+                        complete: function () {
+                            $("#subject-submit").attr("disabled", false).val("Save");
+                        },
+                    });
+                }
             });
         },
     });

@@ -33,7 +33,7 @@ from swift.views.topic import (
     TopicCreate,
     TopicUpdate,
     TopicDelete,
-    FilteredSubjectsView,
+    # FilteredSubjectsView,
     GetSubjectsView,
 )
 
@@ -42,8 +42,6 @@ from swift.views.subtopic import (
     SubtopicCreate,
     SubtopicUpdate,
     SubtopicDelete,
-    FilterTopicsView,
-    FilterSubjectsView,
     FiltersearchSubjectsView,
     FiltersearchTopicsView,
     FiltersearchCoursesView,
@@ -89,7 +87,6 @@ urlpatterns = [
     path("topic/create/", TopicCreate.as_view(), name="create_topic"),
     path("topic/<int:pk>/update/", TopicUpdate.as_view(), name="update_topic"),
     path("topic/<int:pk>/delete/", TopicDelete.as_view(), name="delete_topic"),
-    path("topic/filter/", FilteredSubjectsView.as_view(), name="filter_topic"),
     path("topic/searchfilter/", GetSubjectsView.as_view(), name="searchfilter_topic"),
     
     # Subtopic
@@ -97,8 +94,7 @@ urlpatterns = [
     path("subtopic/create/", SubtopicCreate.as_view(), name="create_subtopic"),
     path("subtopic/<int:pk>/update/", SubtopicUpdate.as_view(), name="update_subtopic"),
     path("subtopic/<int:pk>/delete/", SubtopicDelete.as_view(), name="delete_subtopic"),
-    path("subtopic/topicfilter/", FilterTopicsView.as_view(), name="filter_topicsubtopic"),
-    path("subtopic/subjectfilter/", FilterSubjectsView.as_view(), name="filter_subjectsubtopic"),
+   
     
     # search filter in subtopic
     path('filter_subjects/', FiltersearchSubjectsView.as_view(), name='filter_subjects'),

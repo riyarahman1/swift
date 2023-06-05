@@ -10,7 +10,7 @@ class SubjectsForm(forms.ModelForm):
     )
     course = forms.ModelChoiceField(
         label="course",widget=forms.Select(attrs={'class':'form-control'}),
-        queryset=Course.objects.all(),
+        queryset=Course.objects.filter(is_active=True),
         required=True
     )
     

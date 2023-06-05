@@ -25,7 +25,7 @@ class SubTopicForm(forms.ModelForm):
     course = forms.ModelChoiceField(
         label="Course",
         widget=forms.Select(attrs={"class": "form-control", "id": "id_course"}),
-        queryset=Course.objects.all(),
+        queryset=Course.objects.filter(is_active=True),
         required=True,
     )
     lessons = forms.CharField(

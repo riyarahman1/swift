@@ -10,27 +10,34 @@ from django.template.loader import render_to_string
 from django.db import transaction
 from swift.models import CREATE, UPDATE, SUCCESS, FAILED, DELETE
 from django.shortcuts import get_object_or_404, render
+from django.core import serializers
 
 
 class TopicView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         query = request.GET.get("search")
-        subjects = request.GET.get("subject") 
-        courses = request.GET.get("course") 
-        condition = {"is_active": True}
+        subjects = request.GET.get("subject")
+        courses = request.GET.get("course")
+        condition = {}
+
         if query:
             condition["name__icontains"] = query
         if subjects:
             condition["subject_id"] = subjects
         if courses:
-            condition["subject__course__id"] = courses
+            condition["subject__course_id"] = courses
+
+        condition["subject__is_active"] = True
+        condition["subject__course__is_active"] = True
+        condition["is_active"] = True
+
         topics = Topic.objects.select_related("subject").filter(**condition).order_by("-id")
 
-        subject_list = Subject.objects.filter(is_active=True)
+        subject_list = Subject.objects.filter(course__is_active=True, is_active=True)
         course_list = Course.objects.filter(is_active=True)
         if courses:
             subject_list = subject_list.filter(course_id=courses)
-        
+
         context = {}
         context["subjects"] = subject_list
         context["courses"] = course_list
@@ -64,14 +71,11 @@ class TopicView(LoginRequiredMixin, View):
 
         course_id = request.GET.get("course_id")
         course = get_object_or_404(Course, id=course_id) if course_id else None
-
-        form = TopicForm(
-            initial={"course": course}
-        )  
-
+        form = TopicForm(initial={"course": course})
 
         context["form"] = form
         return renderfile(request, "topic", "index", context)
+
 
 
 
@@ -147,6 +151,7 @@ class TopicCreate(LoginRequiredMixin, View):
                 "swift/topic/topic_form.html", context, request=request
             )
         return JsonResponse(response)
+
 
 class TopicUpdate(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -233,7 +238,6 @@ class TopicUpdate(LoginRequiredMixin, View):
             )
             return JsonResponse(response)
 
-
 class TopicDelete(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         id = kwargs.get("pk", None)
@@ -259,20 +263,25 @@ class TopicDelete(LoginRequiredMixin, View):
         response["status"] = True
         response["message"] = "Topic deleted successfully"
         return JsonResponse(response)
-
-
-#  add filter
-class FilteredSubjectsView(View):
-    def get(self, request):
-        course_id = request.GET.get('course_id')
-        subjects = Subject.objects.filter(course_id=course_id)
-        subject_list = [{'id': subject.id, 'name': subject.name} for subject in subjects]
-        return JsonResponse({'subjects': subject_list})
     
 
-# searchfilter
+# filter
 class GetSubjectsView(View):
     def get(self, request, *args, **kwargs):
         course_id = request.GET.get("course_id")
-        subjects = Subject.objects.filter(subject__course_id=course_id).values("id", "name")
-        return JsonResponse({"subjects": list(subjects)})    
+        print("eeeeeee", course_id)
+        if course_id:
+            subjects = Subject.objects.filter(course_id=course_id, is_active=True)
+        else:
+            subjects = Subject.objects.filter(is_active=True)
+
+        subjects_data = serializers.serialize('python', subjects, fields=('id', 'name'))
+        subjects_list = [
+            {'id': subject['pk'], 'name': subject['fields']['name']}
+            for subject in subjects_data
+        ]
+
+        return JsonResponse({"subjects": subjects_list})
+
+    
+ 

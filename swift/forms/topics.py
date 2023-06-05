@@ -13,7 +13,7 @@ class TopicForm(forms.ModelForm):
     course = forms.ModelChoiceField(
         label="Course",
         widget=forms.Select(attrs={"class": "form-control"}),
-        queryset=Course.objects.all(),
+        queryset=Course.objects.filter(is_active=True),
         required=True,
     )
     subject = forms.ModelChoiceField(
@@ -28,14 +28,17 @@ class TopicForm(forms.ModelForm):
         if self.is_bound and self.data.get("course"):
             course_id = self.data.get("course")
             self.fields["subject"].queryset = Subject.objects.filter(
-                course__id=course_id
+                course__id=course_id,
+                is_active=True
             )
         elif self.instance.pk and self.instance.subject:
             course_id = self.instance.subject.course_id
             self.fields["subject"].queryset = Subject.objects.filter(
-                course__id=course_id
+                course__id=course_id,
+                is_active=True
             )
 
     class Meta:
         model = Topic
-        fields = ["name", "course" ,"subject"]
+        fields = ["name", "course", "subject"]
+

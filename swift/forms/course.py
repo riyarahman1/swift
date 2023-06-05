@@ -12,7 +12,7 @@ class CourseForm(forms.ModelForm):
     
     curriculum = forms.ModelChoiceField(
         label="curriculum",widget=forms.Select(attrs={'class':'form-control'}),
-        queryset=Curriculum.objects.all(),
+        queryset=Curriculum.objects.filter(is_active=True),
         required=True
     )
 
