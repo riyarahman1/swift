@@ -191,6 +191,7 @@ class SubtopicUpdate(View):
         data["template"] = render_to_string(
             "swift/subtopic/subtopic_form.html", context, request=request
         )
+        print(context)
         return JsonResponse(data)
 
     def post(self, request, *args, **kwargs):

@@ -3,6 +3,12 @@ from swift.models import Course, Curriculum
 
 
 class CourseForm(forms.ModelForm):
+    curriculum = forms.ModelChoiceField(
+        label="Curriculum",
+        widget=forms.Select(attrs={"class": "form-control"}),
+        queryset=Curriculum.objects.filter(is_active=True),
+        required=True,
+    )
     name = forms.CharField(
         label="Title",
         max_length=200,
@@ -11,12 +17,12 @@ class CourseForm(forms.ModelForm):
         error_messages={"required": "The name should not be empty"},
     )
 
-    curriculum = forms.ModelChoiceField(
-        label="curriculum",
-        widget=forms.Select(attrs={"class": "form-control"}),
-        queryset=Curriculum.objects.filter(is_active=True),
-        required=True,
-    )
+    def __init__(self, *args, **kwargs):
+        super(CourseForm, self).__init__(*args, **kwargs)
+        self.fields["curriculum"].label_from_instance = self.label_from_instance
+
+    def label_from_instance(self, obj):
+        return f"{obj.name} ({obj.country})"
 
     class Meta:
         model = Course

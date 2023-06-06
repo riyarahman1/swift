@@ -59,9 +59,11 @@ class CurriculumCreate(LoginRequiredMixin, View):
             try:
                 with transaction.atomic():
                     name = request.POST.get("name", None)
+                    country = request.POST.get("country", None)
+                
                     # CHECK THE DATA EXISTS
                     if not Curriculum.objects.filter(name=name).exists():
-                        obj = Curriculum.objects.create(name=name)
+                        obj = Curriculum.objects.create(name=name,country=country)
 
                         # log entry
                         log_data = {}

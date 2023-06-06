@@ -5,7 +5,8 @@
         <div class="d-flex justify-content-between">
             <h1 class="page-block-title">Curriculum</h1>
             <div>
-                <a class="add-curriculum" id="create_curriculum" data-fancybox="" data-src="#curriculum-popup"  data-url="{% url 'appswift:create_curriculum'%}">
+                <a class="add-curriculum" id="create_curriculum" data-fancybox="" data-src="#curriculum-popup"
+                    data-url="{% url 'appswift:create_curriculum'%}">
                     <button>+</button>
                 </a>
             </div>
@@ -16,6 +17,7 @@
                 <thead>
                     <tr>
                         <th>Sl.NO</th>
+                        <th>Country</th>
                         <th>Name</th>
                         <th>Action</th>
                     </tr>
@@ -49,7 +51,7 @@
     </div>
 </div>
 </div>
-{% endblock body_block %} 
+{% endblock body_block %}
 {% block page_script %}
 <script src="{% static '/swift/assets/js/curriculum.js' %}?v={% now 'd_m_yH:i:s'%}"></script>
 {% endblock page_script %}

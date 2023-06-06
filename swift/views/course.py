@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from swift.forms.course import CourseForm
 from swift.helper import renderfile, is_ajax, LogUserActivity
-from swift.models import Course, Curriculum, Subject, Topic, SubTopic
+from swift.models import Course, Curriculum ,Subject,Topic,SubTopic
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.paginator import *
@@ -13,27 +13,18 @@ from django.db import transaction
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView
 
-
 class CourseView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         query = request.GET.get("search")
-        curriculums = request.GET.get(
-            "curriculum"
-        )  # selected curriculum values as a list
+        curriculums = request.GET.get("curriculum")  # selected curriculum values as a list
         condition = {"is_active": True}
         if query:
             condition["name__icontains"] = query
         if curriculums:
             condition["curriculum_id"] = curriculums
-        courses = (
-            Course.objects.select_related("curriculum")
-            .filter(**condition)
-            .order_by("-id")
-        )
+        courses = Course.objects.select_related('curriculum').filter(**condition).order_by("-id")
 
-        curriculums_list = Curriculum.objects.filter(
-            is_active=True
-        )  # Retrieve all curriculum options
+        curriculums_list = Curriculum.objects.filter(is_active=True)  # Retrieve all curriculum options
 
         context = {}
         context["curriculums"] = curriculums_list  # Add curriculums to the context
@@ -253,3 +244,6 @@ class CourseDelete(LoginRequiredMixin, View):
         response["status"] = True
         response["message"] = "Course deleted successfully"
         return JsonResponse(response)
+
+
+

@@ -55,8 +55,8 @@ class SubTopicForm(forms.ModelForm):
                     course_id=course_id
                 )
             except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty queryset
-
+                pass  
+            
         if "subject" in self.data:
             try:
                 subject_id = int(self.data.get("subject"))

@@ -186,8 +186,14 @@ class ActivityLog(models.Model):
 
 
 class Curriculum(models.Model):
+    COUNTRY_CHOICES = [
+        ("UK", "UK"),
+        ("International", "International"),
+    ]
+
     name = models.CharField(max_length=100, blank=True)
     is_active = models.BooleanField("Active", default=True)
+    country = models.CharField(max_length=100, choices=COUNTRY_CHOICES, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True)
 

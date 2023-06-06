@@ -331,7 +331,7 @@ $(document).on('click', '.subtopic-edit', function (event) {
             $('#id_course').val(response.course_id);
             $('#id_subject').val(response.subject_id);
             $('#id_topic').val(response.topic_id);
-
+            console.log($('#id_course').val());
 
             $(document).off('change', '#id_course').on('change', '#id_course', function () {
                 var courseId = $(this).val();
@@ -438,3 +438,6 @@ function DeleteSubtopic(id) {
         }
     });
 }
+
+
+
