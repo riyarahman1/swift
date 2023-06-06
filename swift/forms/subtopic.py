@@ -51,16 +51,21 @@ class SubTopicForm(forms.ModelForm):
         if "course" in self.data:
             try:
                 course_id = int(self.data.get("course"))
-                self.fields["subject"].queryset = Subject.objects.filter(course_id=course_id)
+                self.fields["subject"].queryset = Subject.objects.filter(
+                    course_id=course_id
+                )
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty queryset
 
         if "subject" in self.data:
             try:
                 subject_id = int(self.data.get("subject"))
-                self.fields["topic"].queryset = Topic.objects.filter(subject_id=subject_id)
+                self.fields["topic"].queryset = Topic.objects.filter(
+                    subject_id=subject_id
+                )
             except (ValueError, TypeError):
                 pass
+
     class Meta:
         model = SubTopic
         fields = ["name", "topic", "subject", "course", "lessons", "objectives"]

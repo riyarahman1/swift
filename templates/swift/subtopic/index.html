@@ -5,7 +5,8 @@
         <div class="d-flex justify-content-between">
             <div class="row">
                 <h1 class="page-block-title" style="margin-top: 5px;"><b>Subtopic</b></h1>
-                <div class="col-md-12" style="align-items: center;margin-left: 27%;margin-top: -2%;margin-bottom: 40px;">
+                <div class="col-md-12"
+                    style="align-items: center;margin-left: 27%;margin-top: -2%;margin-bottom: 40px;">
                     <div class="row align-items-center">
                         <div class="col-md-2">
                             <select id="course-select" name="course" class="form-control">
@@ -32,15 +33,17 @@
                             </select>
                         </div>
                         <div class="col-sm-2">
-                            <input class="form-control" type="text" name="search" id="search-input" placeholder="Search" aria-label="Search">
+                            <input class="form-control" type="text" name="search" id="search-input" placeholder="Search"
+                                aria-label="Search">
                         </div>
                         <div class="col-md-2">
-                            <button class="btn btn-outline-secondary" type="button" name="reset" id="reset-button">Reset</button>
+                            <button class="btn btn-outline-secondary" type="button" name="reset"
+                                id="reset-button">Reset</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div style="margin-right: 31px;">
                 <a class="add-subtopic" id="create_subtopic" data-fancybox="" data-src="#subtopic-popup"
                     data-url="{% url 'appswift:create_subtopic'%}">
@@ -48,8 +51,8 @@
                 </a>
             </div>
         </div>
-        
-    
+
+
         <div>
             <table id="search-results">
                 <thead>

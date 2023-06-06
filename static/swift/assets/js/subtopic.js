@@ -62,7 +62,7 @@ $(document).ready(function () {
             });
         },
     });
-    
+
 });
 
 // -------------------------------------------------------------Filter,search and reset----------------------------------------------
@@ -152,7 +152,7 @@ function updateSubjectDropdown(courseId) {
                 }));
             });
 
-          
+
             subjectSelect.trigger('change');
         }
     });
@@ -246,7 +246,7 @@ $(document).on('click', '#create_subtopic', function (event) {
         success: function (response) {
             $('#subtopic-form-div').html(response.template);
             $('#popup_head').html(response.title);
-            
+
             // Event handler for course change
             $('#id_course').change(function () {
                 var courseId = $(this).val();
@@ -389,7 +389,7 @@ $(document).on('click', '.subtopic-edit', function (event) {
                 });
             });
 
-    
+
             $('#id_subject').trigger('change');
             $('#id_topic').trigger('change');
             $('#id_course').trigger('change');

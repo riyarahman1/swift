@@ -2,51 +2,55 @@
 {% load my_filters %}
 {% block body_block %}
 
-{% if  subtopics.has_other_pages %}
-    {% get_proper_elided_page_range subtopics.paginator subtopics.number as page_range %}
-    <div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span> of <span>{{ subtopics.paginator.count }}</span> entries</div>
-    <input type="hidden" id="page" value="1" />
-    <input type="hidden" id="current_page" value="{{current_page}}" />
-    <input type="hidden" id="start_count" value="1" />
-    <ul class="pagination mt-0 ml-auto" id="pagination">
-        {% if subtopics.has_previous %}
-            <li>
-                <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.previous_page_number }}');" page-val="{{ subtopics.previous_page_number }}">Previous</a>
-            </li>
-        {% else %}
-            <li class="disabled"><a href="#" tabindex="-1"></a></li>
-        {% endif %}
+{% if subtopics.has_other_pages %}
+{% get_proper_elided_page_range subtopics.paginator subtopics.number as page_range %}
+<div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span>
+    of <span>{{ subtopics.paginator.count }}</span> entries</div>
+<input type="hidden" id="page" value="1" />
+<input type="hidden" id="current_page" value="{{current_page}}" />
+<input type="hidden" id="start_count" value="1" />
+<ul class="pagination mt-0 ml-auto" id="pagination">
+    {% if subtopics.has_previous %}
+    <li>
+        <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.previous_page_number }}');"
+            page-val="{{ subtopics.previous_page_number }}">Previous</a>
+    </li>
+    {% else %}
+    <li class="disabled"><a href="#" tabindex="-1"></a></li>
+    {% endif %}
 
-        {% for i in page_range %}
-            {% if current_page == i %}
-                <li>
-                    <a href="#" class="active">{{ i }}</a>
-                </li>
-            {% else %}
-                {% if i == subtopics.paginator.ELLIPSIS %}
-                    <li>
-                        {{ subtopics.paginator.ELLIPSIS }}
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="javascript:void(0)" onclick="FilterSubtopics('{{ i }}');" page-val="{{ i }}">{{ i }}</a>
-                    </li>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        {% if subtopics.has_next %}
-            <li>
-                <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.next_page_number }}');" page-val="{{ subtopics.next_page_number }}">Next</a>
-            </li>
-        {% else %}
-            <li class="disabled"><a href="#" tabindex="-1" ></a></li>
-        {% endif %}
-    </ul> 
+    {% for i in page_range %}
+    {% if current_page == i %}
+    <li>
+        <a href="#" class="active">{{ i }}</a>
+    </li>
+    {% else %}
+    {% if i == subtopics.paginator.ELLIPSIS %}
+    <li>
+        {{ subtopics.paginator.ELLIPSIS }}
+    </li>
+    {% else %}
+    <li>
+        <a href="javascript:void(0)" onclick="FilterSubtopics('{{ i }}');" page-val="{{ i }}">{{ i }}</a>
+    </li>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    {% if subtopics.has_next %}
+    <li>
+        <a href="javascript:void(0)" onclick="FilterSubtopics('{{ subtopics.next_page_number }}');"
+            page-val="{{ subtopics.next_page_number }}">Next</a>
+    </li>
+    {% else %}
+    <li class="disabled"><a href="#" tabindex="-1"></a></li>
+    {% endif %}
+</ul>
 
 {% else %}
-<div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span> of <span>{{ subtopics.paginator.count }}</span> entries</div>
+<div class="pagination-count">Showing <span>{{ subtopics.start_index }}</span> to <span>{{ subtopics.end_index }}</span>
+    of <span>{{ subtopics.paginator.count }}</span> entries</div>
 <ul class="pagination mt-0 ml-auto" id="pagination">
     <li><a href="#" class="active">1</a></li>
-  </ul> 
+</ul>
 {% endif %}
 {% endblock %}

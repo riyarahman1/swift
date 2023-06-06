@@ -3,7 +3,7 @@ from django.views.generic import View
 from swift.forms.subjects import SubjectsForm
 from django.core.paginator import *
 from swift.constantvariables import PAGINATION_PERPAGE
-from swift.models import Subject,Course
+from swift.models import Subject, Course
 from swift.helper import renderfile, is_ajax, LogUserActivity
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -22,14 +22,15 @@ class SubjectsView(LoginRequiredMixin, View):
             condition["name__icontains"] = querys
         if courses:
             condition["course_id"] = courses
-        subjects = Subject.objects.select_related('course').filter(**condition).order_by("-id")
+        subjects = (
+            Subject.objects.select_related("course").filter(**condition).order_by("-id")
+        )
 
         course_list = Course.objects.all()
 
-    
         context = {}
         context["courses"] = course_list  # Add courses to the context
-        
+
         try:
             page = int(request.GET.get("page", 1))
         except ValueError:

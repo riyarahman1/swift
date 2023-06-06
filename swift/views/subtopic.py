@@ -27,21 +27,23 @@ class SubtopicView(LoginRequiredMixin, View):
         if subjects:
             condition["topic__subject__id"] = subjects
         if courses:
-            condition["topic__subject__course__id"] = courses    
+            condition["topic__subject__course__id"] = courses
 
         subtopics = (
             SubTopic.objects.select_related("topic").filter(**condition).order_by("-id")
         )
 
-        topic_list = Topic.objects.filter(subject__course__is_active=True, is_active=True)
+        topic_list = Topic.objects.filter(
+            subject__course__is_active=True, is_active=True
+        )
         subject_list = Subject.objects.filter(course__is_active=True, is_active=True)
         course_list = Course.objects.filter(is_active=True)
-        
+
         if subjects:
             topic_list = topic_list.filter(subject_id=subjects)
         if courses:
             subject_list = subject_list.filter(course_id=courses)
-            
+
         context = {}
         context["subjects"] = subject_list
         context["topics"] = topic_list
@@ -85,7 +87,6 @@ class SubtopicView(LoginRequiredMixin, View):
         return renderfile(request, "subtopic", "index", context)
 
 
-
 class SubtopicCreate(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = SubTopicForm()
@@ -93,7 +94,9 @@ class SubtopicCreate(LoginRequiredMixin, View):
         data = {
             "status": True,
             "title": "Add Subtopic",
-            "template": render_to_string("swift/subtopic/subtopic_form.html", context, request=request),
+            "template": render_to_string(
+                "swift/subtopic/subtopic_form.html", context, request=request
+            ),
         }
         return JsonResponse(data)
 
@@ -107,12 +110,15 @@ class SubtopicCreate(LoginRequiredMixin, View):
                 topic = request.POST.get("topic", None)
                 lessons = request.POST.get("lessons", None)
                 objectives = request.POST.get("objectives", None)
-                
+
                 # CHECK THE DATA EXISTS
                 if not SubTopic.objects.filter(name=name).exists():
                     obj = SubTopic.objects.create(
-                         name=name, topic_id=topic,lessons=lessons,objectives=objectives
-                     )
+                        name=name,
+                        topic_id=topic,
+                        lessons=lessons,
+                        objectives=objectives,
+                    )
 
                     # log entry
                     log_data = {}
@@ -160,24 +166,31 @@ class SubtopicCreate(LoginRequiredMixin, View):
             )
         return JsonResponse(response)
 
+
 class SubtopicUpdate(View):
     def get(self, request, *args, **kwargs):
         data = {}
         id = kwargs.get("pk")
         obj = get_object_or_404(SubTopic, id=id)
         form = SubTopicForm(instance=obj)
-        subject_id = obj.topic.subject_id if obj.topic and obj.topic.subject_id else None
+        subject_id = (
+            obj.topic.subject_id if obj.topic and obj.topic.subject_id else None
+        )
         topic_id = obj.topic_id if obj.topic else None
         context = {"form": form, "id": id}
         data["status"] = True
         data["title"] = "Edit SubTopic"
-        data["course_id"] = obj.topic.subject.course_id if obj.topic and obj.topic.subject else None
+        data["course_id"] = (
+            obj.topic.subject.course_id if obj.topic and obj.topic.subject else None
+        )
         data["subject_id"] = subject_id
         data["topic_id"] = topic_id
         data["name"] = obj.name
         data["lessons"] = obj.lessons
         data["objectives"] = obj.objectives
-        data["template"] = render_to_string("swift/subtopic/subtopic_form.html", context, request=request)
+        data["template"] = render_to_string(
+            "swift/subtopic/subtopic_form.html", context, request=request
+        )
         return JsonResponse(data)
 
     def post(self, request, *args, **kwargs):
@@ -191,13 +204,17 @@ class SubtopicUpdate(View):
 
         if form.is_valid():
             try:
-                name = form.cleaned_data['name']
+                name = form.cleaned_data["name"]
                 topic_id = request.POST.get("topic", None)
                 topic = get_object_or_404(Topic, id=topic_id)
-                lessons = form.cleaned_data['lessons']
-                objectives = form.cleaned_data['objectives']
+                lessons = form.cleaned_data["lessons"]
+                objectives = form.cleaned_data["objectives"]
 
-                if not SubTopic.objects.filter(name=name, topic=topic).exclude(id=id).exists():
+                if (
+                    not SubTopic.objects.filter(name=name, topic=topic)
+                    .exclude(id=id)
+                    .exists()
+                ):
                     obj.name = name
                     obj.topic = topic
                     obj.lessons = lessons
@@ -255,7 +272,9 @@ class SubtopicUpdate(View):
             context = {"form": form, "id": id}
             response["title"] = "Edit Subtopic"
             response["valid_form"] = False
-            response["template"] = render_to_string("swift/subtopic/subtopic_form.html", context, request=request)
+            response["template"] = render_to_string(
+                "swift/subtopic/subtopic_form.html", context, request=request
+            )
 
         return JsonResponse(response)
 
@@ -287,14 +306,15 @@ class SubtopicDelete(LoginRequiredMixin, View):
         return JsonResponse(response)
 
 
-
 # ----------------------------------------------filter---------------------------------------------------
 class FiltersearchSubjectsView(View):
     def get(self, request):
         course_id = request.GET.get("course")
 
         if course_id:
-            subjects = Subject.objects.filter(course_id=course_id, is_active=True).values("id", "name")
+            subjects = Subject.objects.filter(
+                course_id=course_id, is_active=True
+            ).values("id", "name")
         else:
             subjects = Subject.objects.filter(is_active=True).values("id", "name")
 
@@ -309,7 +329,7 @@ class FiltersearchCoursesView(View):
         course_list = list(courses)
         return JsonResponse({"courses": course_list})
 
-    
+
 class FiltersearchTopicsView(View):
     def get(self, request):
         subject_id = request.GET.get("subject")

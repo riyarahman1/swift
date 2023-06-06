@@ -57,13 +57,13 @@ $(document).ready(function () {
                         },
                         complete: function () {
                             $("#topic-submit").attr("disabled", false).val("Save");
-                       },
+                        },
                     });
                 }
             });
         },
     });
-    
+
 });
 
 // Filter,search and reset
@@ -153,18 +153,18 @@ $(document).ready(function () {
         updateSubjectDropdown(courseId); // Pass the courseId
         FilterTopics('');
     });
-    
-    
+
+
     $('#reset-button').click(function () {
         $('#search-input').val('');
         $('#subject-select').val('');
         $('#course-select').val('');
         $('#reset-input').val('true');
-        updateSubjectDropdown(null); 
+        updateSubjectDropdown(null);
         FilterTopics('');
-        return false; 
+        return false;
     });
-    
+
 
 });
 // -------------------------------------------------------------create topic----------------------------------------------

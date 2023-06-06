@@ -75,8 +75,6 @@ urlpatterns = [
     path("course/create/", CourseCreate.as_view(), name="create_course"),
     path("course/<int:pk>/update/", CourseUpdate.as_view(), name="update_course"),
     path("course/<int:pk>/delete/", CourseDelete.as_view(), name="delete_course"),
-   
-    
     # Subject
     path("subject/", SubjectsView.as_view(), name="subject"),
     path("subject/create/", SubjectCreate.as_view(), name="create_subject"),
@@ -88,18 +86,15 @@ urlpatterns = [
     path("topic/<int:pk>/update/", TopicUpdate.as_view(), name="update_topic"),
     path("topic/<int:pk>/delete/", TopicDelete.as_view(), name="delete_topic"),
     path("topic/searchfilter/", GetSubjectsView.as_view(), name="searchfilter_topic"),
-    
     # Subtopic
     path("subtopic/", SubtopicView.as_view(), name="subtopic"),
     path("subtopic/create/", SubtopicCreate.as_view(), name="create_subtopic"),
     path("subtopic/<int:pk>/update/", SubtopicUpdate.as_view(), name="update_subtopic"),
     path("subtopic/<int:pk>/delete/", SubtopicDelete.as_view(), name="delete_subtopic"),
-   
-    
     # search filter in subtopic
-    path('filter_subjects/', FiltersearchSubjectsView.as_view(), name='filter_subjects'),
-    path('filter_topics/', FiltersearchTopicsView.as_view(), name='filter_topics'),
-    path('filter_courses/', FiltersearchCoursesView.as_view(), name='filter_courses'),
-    
-    
+    path(
+        "filter_subjects/", FiltersearchSubjectsView.as_view(), name="filter_subjects"
+    ),
+    path("filter_topics/", FiltersearchTopicsView.as_view(), name="filter_topics"),
+    path("filter_courses/", FiltersearchCoursesView.as_view(), name="filter_courses"),
 ]

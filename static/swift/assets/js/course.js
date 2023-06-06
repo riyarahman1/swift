@@ -7,7 +7,7 @@ $(document).ready(function () {
             event.preventDefault();
             var formData = $("#CourseForm").serializeArray();
             var url = $("#form_url").val();
-    
+
             function showConfirmationDialog() {
                 return Swal.fire({
                     title: "Confirmation",
@@ -25,7 +25,7 @@ $(document).ready(function () {
                     timer: 3000,
                 });
             }
-    
+
             showConfirmationDialog().then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -62,7 +62,7 @@ $(document).ready(function () {
             });
         },
     });
-    
+
 });
 
 // Filter,search and reset
